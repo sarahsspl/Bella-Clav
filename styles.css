@@ -1,0 +1,556 @@
+:root{
+  --bg-light:#F0F7F2;
+  --panel:#C9DEC9;
+  --accent:#8FBF8F;
+  --accent-dark:#5E8C61;
+  --text-dark:#2E4D35;
+  --muted:#E9F2EC;
+  --radius:12px;
+  --container:1100px;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+}
+
+/* RESET */
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  height:100%;
+  margin:0;
+  background:var(--bg-light);
+  color:var(--text-dark);
+  -webkit-font-smoothing:antialiased;
+}
+
+.container{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:24px;
+}
+
+/* HEADER */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:linear-gradient(180deg,var(--panel),transparent);
+  border-bottom:1px solid rgba(0,0,0,0.05);
+}
+.header-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+}
+.brand{
+  font-size:28px;
+  font-weight:700;
+  color:var(--text-dark);
+}
+
+/* NAV DESKTOP */
+.nav{
+  display:flex;
+  gap:18px;
+}
+.nav a{
+  color:var(--text-dark);
+  text-decoration:none;
+  font-weight:500;
+  padding:4px 6px;
+  border-radius:6px;
+}
+.nav a:hover{
+  background:rgba(0,0,0,0.05);
+}
+
+/* MOBILE MENU */
+.menu-toggle{
+  display:none;
+  font-size:22px;
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+.mobile-nav{
+  display:none;
+  background:var(--panel);
+  padding:16px;
+}
+.mobile-nav a{
+  display:block;
+  padding:10px 0;
+  text-decoration:none;
+  color:var(--text-dark);
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:60px 0 40px;
+}
+.hero h1{
+  font-size:40px;
+  font-weight:700;
+  color:var(--accent-dark);
+  margin-bottom:10px;
+}
+.lead{ opacity:.85; margin-bottom:16px; }
+.cta{
+  background:var(--accent-dark);
+  color:#fff;
+  padding:10px 20px;
+  border-radius:999px;
+  text-decoration:none;
+  display:inline-block;
+}
+
+/* GRID + CARDS */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+.card{
+  background:var(--panel);
+  padding:14px;
+  border-radius:var(--radius);
+}
+.card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+/* SHOP PAGE */
+.shop-page{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:24px;
+}
+
+/* FILTERS */
+.filter-section{ margin-bottom:18px; }
+.filter-label{ display:block; font-weight:600; margin-bottom:10px; }
+.filter-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+
+.filter-btn{
+  padding:8px 12px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.1);
+  cursor:pointer;
+}
+.filter-btn.active{ background:var(--accent); color:#fff; }
+
+/* fallback grid (não usado se dropdown ativo) */
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.notes-grid label{
+  padding:10px 12px;
+  background:var(--panel);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* BOTÃO LIMPAR (fallback) */
+#clearNotes{
+  display:inline-block;
+  background:transparent;
+  color:var(--text-dark);
+  border:1px solid rgba(46,77,53,0.2);
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  margin-top:10px;
+  transition:.15s;
+}
+#clearNotes:hover{ background:rgba(46,77,53,0.08); }
+
+/* PRODUCT PAGE */
+.product-page .product-card{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:28px;
+}
+
+/* BOTÕES COMPRAR — CENTRALIZADOS */
+.add-cart,
+.buy-btn{
+  background:var(--accent-dark);
+  padding:8px 12px;
+  border-radius:8px;
+  border:0;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  display:block;
+  margin:0 auto;
+  text-align:center;
+}
+.add-cart:hover,
+.buy-btn:hover{ background:#4c6e4e; }
+
+/* FOOTER */
+.footer-center{ display:flex; justify-content:center; padding:20px 0; }
+.footer-social{ display:flex; gap:24px; align-items:center; }
+.icon-link{ display:flex; gap:8px; align-items:center; color:var(--text-dark); text-decoration:none; font-weight:600; }
+
+/* RESPONSIVO */
+@media(max-width:900px){
+  .nav{ display:none; }
+  .menu-toggle{ display:block; }
+  .brand{ margin-left:12px; } /* desloca um pouco no mobile */
+  .shop-page{ grid-template-columns:1fr; }
+}
+
+/* helper */
+.filter-notes-title {
+  margin-top:14px;
+  margin-bottom:12px;
+  font-weight:600;
+  padding-left:6px;
+  opacity:0.9;
+}
+
+/* =========================
+   Checkbox circular (fallback .note-item)
+   ========================= */
+.note-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:var(--panel);
+  cursor:pointer;
+  transition:background .12s;
+}
+.note-item input[type="checkbox"]{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  opacity:0;
+  margin:0;
+  z-index:2;
+}
+.note-item > span{
+  padding-left:8px;
+  position:relative;
+  z-index:1;
+}
+.note-item > span::before{
+  content:"";
+  position:absolute;
+  left:-28px;
+  top:50%;
+  transform:translateY(-50%);
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  border:2px solid rgba(46,77,53,0.45);
+  background:#ffffff;
+  box-shadow:0 1px 0 rgba(0,0,0,0.02) inset;
+  transition:background .12s, border-color .12s, transform .12s;
+  display:inline-block;
+}
+.note-item > span::after{
+  content:"✓";
+  position:absolute;
+  left:-28px;
+  top:50%;
+  transform:translateY(-50%) scale(.8);
+  font-size:12px;
+  color:white;
+  opacity:0;
+  transition:opacity .12s, transform .12s;
+  pointer-events:none;
+}
+.note-item input[type="checkbox"]:checked + span::before{
+  background:var(--accent-dark);
+  border-color:var(--accent-dark);
+  transform:translateY(-50%) scale(1);
+}
+.note-item input[type="checkbox"]:checked + span::after{
+  opacity:1;
+  transform:translateY(-50%) scale(1);
+}
+.note-item input[type="checkbox"]:focus + span::before{
+  box-shadow:0 0 0 4px rgba(94,140,97,0.14);
+  border-color:var(--accent-dark);
+}
+.note-item:hover{ background:rgba(46,77,53,0.03); }
+
+/* compact */
+@media (max-width:520px){
+  .note-item > span::before,
+  .note-item input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    left:10px;
+  }
+  .note-item > span::after{ font-size:11px; left:10px; }
+  .note-item > span{ padding-left:26px; }
+}
+
+/* =========================
+   Dropdown de notas — caixa com scroll, linhas preenchidas quando checked
+   ========================= */
+
+/* wrapper */
+.notes-dropdown{ width:100%; margin-top:12px; }
+.notes-header{ margin-bottom:8px; }
+.notes-search{
+  width:100%;
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid rgba(0,0,0,0.08);
+  background:#fff;
+}
+
+/* painel / caixa rolável */
+.notes-panel{
+  margin-top:8px;
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:8px;
+  background:#fff;
+  max-height:320px;
+  overflow:auto;
+  box-shadow:0 6px 22px rgba(0,0,0,0.06);
+}
+.notes-controls-top{
+  display:flex;
+  gap:8px;
+  padding:8px;
+  border-bottom:1px solid rgba(0,0,0,0.04);
+}
+.notes-categories{ padding:8px; display:flex; flex-direction:column; gap:6px; }
+.note-category{ border-radius:6px; overflow:hidden; }
+.note-category .cat-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 10px;
+  background:transparent;
+  font-weight:700;
+  font-size:14px;
+}
+.note-list{ display:flex; flex-direction:column; }
+.note-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  cursor:pointer;
+  transition:background .12s;
+  border-left:4px solid transparent;
+}
+.note-row.checked{
+  background:rgba(0,0,0,0.06);
+  border-left-color:var(--accent-dark);
+}
+.note-row input[type="checkbox"]{ position:absolute; opacity:0; pointer-events:none; }
+.note-row .label-text{ position:relative; padding-left:28px; flex:1; }
+.note-row .label-text::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid rgba(46,77,53,0.45);
+  background:#fff;
+  transition:all .12s;
+  display:inline-block;
+}
+.note-row .label-text::after{
+  content:"✓";
+  position:absolute;
+  left:2px;
+  top:50%;
+  transform:translateY(-50%) scale(.9);
+  color:#fff;
+  font-weight:700;
+  font-size:12px;
+  opacity:0;
+  transition:opacity .12s;
+}
+.note-row.checked .label-text::before{
+  background:var(--accent-dark);
+  border-color:var(--accent-dark);
+}
+.note-row.checked .label-text::after{ opacity:1; }
+.note-row + .note-row{ border-top:1px solid rgba(0,0,0,0.03); }
+
+@media (max-width:520px){
+  .notes-panel{ max-height:280px; }
+  .note-row .label-text{ padding-left:26px; }
+  .note-row .label-text::before{ width:16px; height:16px; left:0; }
+  .note-row .label-text::after{ left:1px; font-size:11px; }
+}
+
+/* =========================
+   Small-link / buttons styles (dropdown controls)
+   ========================= */
+.notes-panel .small-link,
+.note-category .small-link,
+.notes-controls-top .small-link {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:8px;
+  font-weight:700;
+  font-size:13px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .12s ease, transform .06s ease, color .12s;
+  text-decoration:none;
+  border:1px solid rgba(46,77,53,0.09);
+  color:var(--text-dark);
+  background:#ffffff;
+}
+#notesSelectAllGlobal,
+.note-category .select-group {
+  background:transparent;
+  color:var(--text-dark);
+  border:1px solid rgba(46,77,53,0.12);
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:8px;
+}
+#notesClearAllGlobal,
+.note-category .clear-group {
+  background:transparent;
+  color:var(--text-dark);
+  border:1px solid rgba(46,77,53,0.12);
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:8px;
+}
+.notes-panel .small-link:focus,
+.note-category .small-link:focus{
+  outline:3px solid rgba(94,140,97,0.14);
+  outline-offset:2px;
+}
+.notes-controls-top{ align-items:center; justify-content:space-between; gap:10px; }
+
+@media (max-width:520px){
+  .notes-controls-top{ flex-direction:column; align-items:stretch; gap:8px; padding:10px; }
+  .notes-controls-top .small-link{ width:100%; justify-content:center; }
+  .note-category .cat-title > div { display:flex; gap:6px; }
+}
+
+/* icon before for visual hint (smaller) */
+#notesSelectAllGlobal::before,
+.note-category .select-group::before {
+  content:"⟲";
+  display:inline-block;
+  margin-right:4px;
+  font-weight:700;
+  color:var(--text-dark);
+  font-size:11px;
+}
+#notesClearAllGlobal::before,
+.note-category .clear-group::before {
+  content:"⟲";
+  display:inline-block;
+  margin-right:4px;
+  font-weight:700;
+  color:var(--text-dark);
+  font-size:11px;
+}
+
+/* smaller sizing adjustments */
+#notesSelectAllGlobal,
+#notesClearAllGlobal,
+.note-category .select-group,
+.note-category .clear-group {
+  padding:4px 8px !important;
+  font-size:12px !important;
+  border-radius:6px !important;
+}
+
+/* font-size reduction for notes rows */
+.note-row .label-text {
+  font-size:13px;
+  padding-left:24px;
+}
+/* smaller circle */
+.note-row .label-text::before {
+  width:14px;
+  height:14px;
+  border-width:2px;
+}
+.note-row .label-text::after {
+  font-size:10px;
+  left:1px;
+}
+.note-row { padding:8px 10px; }
+
+/* =========================
+   iOS / Safari fixes (avoid blue accents)
+   ========================= */
+
+/* remove native appearance and force theme colors (with compatibility) */
+.filter-btn,
+.small-link,
+.menu-toggle,
+.icon-link,
+.nav a {
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  color:var(--text-dark) !important;
+  background:transparent;
+  text-decoration:none;
+
+  /* compatibility for text-decoration color */
+  text-decoration-color: currentColor;
+  -webkit-text-decoration-color: currentColor;
+}
+
+/* remove tap highlight */
+*{ -webkit-tap-highlight-color: rgba(0,0,0,0); }
+
+/* avoid iOS auto-coloring of links/phone numbers */
+a, a:link, a:visited {
+  text-decoration-color: currentColor;
+  -webkit-text-decoration-color: currentColor;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* focus styles (replace default blue ring) */
+.filter-btn:focus,
+.small-link:focus,
+.icon-link:focus,
+.nav a:focus,
+.menu-toggle:focus {
+  outline:none;
+  box-shadow:0 0 0 4px rgba(94,140,97,0.12);
+  border-radius:10px;
+}
+
+/* ensure buttons/inputs follow our styles */
+input, button {
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+/* --------------------------------
+   End of stylesheet
+   -------------------------------- */
