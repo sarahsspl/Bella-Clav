@@ -1,6 +1,3 @@
-/* ============================================================
-   BASE: Variáveis
-============================================================ */
 :root{
   --bg-light:#F0F7F2;
   --panel:#C9DEC9;
@@ -17,19 +14,19 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{
   height:100%;
+  margin:0;
   background:var(--bg-light);
   color:var(--text-dark);
   -webkit-font-smoothing:antialiased;
 }
+
 .container{
   max-width:var(--container);
   margin:0 auto;
   padding:24px;
 }
 
-/* ============================================================
-   HEADER
-============================================================ */
+/* HEADER */
 .site-header{
   position:sticky;
   top:0;
@@ -44,24 +41,12 @@ html,body{
   padding:14px 0;
 }
 .brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
   font-size:28px;
   font-weight:700;
   color:var(--text-dark);
 }
-.brand-logo{
-  width:90px;
-  height:90px;
-  object-fit:cover;
-  border-radius:50%;
-  display:block;
-}
 
-/* ============================================================
-   NAV DESKTOP
-============================================================ */
+/* NAV DESKTOP */
 .nav{
   display:flex;
   gap:18px;
@@ -73,54 +58,31 @@ html,body{
   padding:4px 6px;
   border-radius:6px;
 }
-.nav a:hover{ background:rgba(0,0,0,0.05); }
+.nav a:hover{
+  background:rgba(0,0,0,0.05);
+}
 
-/* ============================================================
-   MOBILE MENU (CORRIGIDO)
-============================================================ */
+/* MOBILE MENU */
 .menu-toggle{
   display:none;
+  font-size:22px;
   background:none;
   border:none;
   cursor:pointer;
-  width:56px;
-  height:56px;
-  position:absolute;
-  left:12px;
-  top:50%;
-  transform:translateY(-50%);
-  padding:8px;
 }
-.menu-toggle span,
-.menu-toggle::before,
-.menu-toggle::after{
-  content:"";
-  display:block;
-  width:32px;
-  height:5px;
-  margin:6px 0;
-  background:var(--text-dark);
-  border-radius:4px;
-  transition:.18s;
-}
-.menu-toggle[aria-expanded="true"]::before{
-  transform:translateY(11px) rotate(45deg);
-}
-.menu-toggle[aria-expanded="true"]::after{
-  transform:translateY(-11px) rotate(-45deg);
-}
-.menu-toggle[aria-expanded="true"] span{ opacity:0; }
-
 .mobile-nav{
   display:none;
   background:var(--panel);
   padding:16px;
-  border-radius:12px;
+}
+.mobile-nav a{
+  display:block;
+  padding:10px 0;
+  text-decoration:none;
+  color:var(--text-dark);
 }
 
-/* ============================================================
-   HERO
-============================================================ */
+/* HERO */
 .hero{
   text-align:center;
   padding:60px 0 40px;
@@ -129,12 +91,19 @@ html,body{
   font-size:40px;
   font-weight:700;
   color:var(--accent-dark);
+  margin-bottom:10px;
 }
-.lead{opacity:.85; margin-bottom:16px;}
+.lead{ opacity:.85; margin-bottom:16px; }
+.cta{
+  background:var(--accent-dark);
+  color:#fff;
+  padding:10px 20px;
+  border-radius:999px;
+  text-decoration:none;
+  display:inline-block;
+}
 
-/* ============================================================
-   GRID DE PRODUTOS
-============================================================ */
+/* GRID + CARDS */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -145,169 +114,710 @@ html,body{
   background:var(--panel);
   padding:14px;
   border-radius:var(--radius);
-  display:flex;
-  flex-direction:column;
-  min-height:340px;
-  gap:12px;
 }
 .card img{
   width:100%;
-  height:180px;
-  object-fit:contain;
+  height:200px;
+  object-fit:cover;
   border-radius:8px;
-}
-.card h3{
-  font-size:18px;
-  line-height:1.2;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  display:-webkit-box;
-  overflow:hidden;
-  min-height:2.4em;
-}
-.card .price{
-  font-weight:600;
-}
-.buy-btn{
-  margin-top:auto;
-  width:130px;
-  height:40px;
-  align-self:center;
-  background:var(--accent-dark);
-  color:white;
-  border:0;
-  border-radius:999px;
-  font-weight:700;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  margin-bottom:10px;
 }
 
-/* ============================================================
-   SHOP PAGE
-============================================================ */
+/* SHOP PAGE */
 .shop-page{
   display:grid;
   grid-template-columns:260px 1fr;
   gap:24px;
 }
 
-/* ============================================================
-   NOTAS — DROPDOWN (CORRIGIDO)
-============================================================ */
-.notes-panel{
+/* FILTERS */
+.filter-section{ margin-bottom:18px; }
+.filter-label{ display:block; font-weight:600; margin-bottom:10px; }
+.filter-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+
+.filter-btn{
+  padding:8px 12px;
+  border-radius:10px;
   background:#fff;
-  border-radius:12px;
-  max-height:300px;
-  overflow-y:auto;
-  padding:10px;
+  border:1px solid rgba(0,0,0,0.1);
+  cursor:pointer;
+}
+.filter-btn.active{ background:var(--accent); color:#fff; }
+
+/* fallback grid (não usado se dropdown ativo) */
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.notes-grid label{
+  padding:10px 12px;
+  background:var(--panel);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* BOTÃO LIMPAR (fallback) */
+#clearNotes{
+  display:inline-block;
+  background:transparent;
+  color:var(--text-dark);
+  border:1px solid rgba(46,77,53,0.2);
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  margin-top:10px;
+  transition:.15s;
+}
+#clearNotes:hover{ background:rgba(46,77,53,0.08); }
+
+/* PRODUCT PAGE */
+.product-page .product-card{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:28px;
+}
+
+/* BOTÕES COMPRAR — CENTRALIZADOS */
+.add-cart,
+.buy-btn{
+  background:var(--accent-dark);
+  padding:8px 12px;
+  border-radius:8px;
+  border:0;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  display:block;
+  margin:0 auto;
+  text-align:center;
+}
+.add-cart:hover,
+.buy-btn:hover{ background:#4c6e4e; }
+
+/* FOOTER */
+.footer-center{ display:flex; justify-content:center; padding:20px 0; }
+.footer-social{ display:flex; gap:24px; align-items:center; }
+.icon-link{ display:flex; gap:8px; align-items:center; color:var(--text-dark); text-decoration:none; font-weight:600; }
+
+/* RESPONSIVO */
+@media(max-width:900px){
+  .nav{ display:none; }
+  .menu-toggle{ display:block; }
+  .brand{ margin-left:12px; } /* desloca um pouco no mobile */
+  .shop-page{ grid-template-columns:1fr; }
+}
+
+/* helper */
+.filter-notes-title {
+  margin-top:14px;
+  margin-bottom:12px;
+  font-weight:600;
+  padding-left:6px;
+  opacity:0.9;
+}
+
+/* =========================
+   Checkbox circular (fallback .note-item)
+   ========================= */
+.note-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:var(--panel);
+  cursor:pointer;
+  transition:background .12s;
+}
+.note-item input[type="checkbox"]{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  opacity:0;
+  margin:0;
+  z-index:2;
+}
+.note-item > span{
+  padding-left:8px;
+  position:relative;
+  z-index:1;
+}
+.note-item > span::before{
+  content:"";
+  position:absolute;
+  left:-28px;
+  top:50%;
+  transform:translateY(-50%);
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  border:2px solid rgba(46,77,53,0.45);
+  background:#ffffff;
+  box-shadow:0 1px 0 rgba(0,0,0,0.02) inset;
+  transition:background .12s, border-color .12s, transform .12s;
+  display:inline-block;
+}
+.note-item > span::after{
+  content:"✓";
+  position:absolute;
+  left:-28px;
+  top:50%;
+  transform:translateY(-50%) scale(.8);
+  font-size:12px;
+  color:white;
+  opacity:0;
+  transition:opacity .12s, transform .12s;
+  pointer-events:none;
+}
+.note-item input[type="checkbox"]:checked + span::before{
+  background:var(--accent-dark);
+  border-color:var(--accent-dark);
+  transform:translateY(-50%) scale(1);
+}
+.note-item input[type="checkbox"]:checked + span::after{
+  opacity:1;
+  transform:translateY(-50%) scale(1);
+}
+.note-item input[type="checkbox"]:focus + span::before{
+  box-shadow:0 0 0 4px rgba(94,140,97,0.14);
+  border-color:var(--accent-dark);
+}
+.note-item:hover{ background:rgba(46,77,53,0.03); }
+
+/* compact */
+@media (max-width:520px){
+  .note-item > span::before,
+  .note-item input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    left:10px;
+  }
+  .note-item > span::after{ font-size:11px; left:10px; }
+  .note-item > span{ padding-left:26px; }
+}
+
+/* =========================
+   Dropdown de notas — caixa com scroll, linhas preenchidas quando checked
+   ========================= */
+
+/* wrapper */
+.notes-dropdown{ width:100%; margin-top:12px; }
+.notes-header{ margin-bottom:8px; }
+.notes-search{
+  width:100%;
+  padding:8px 12px;
+  border-radius:8px;
   border:1px solid rgba(0,0,0,0.08);
-  box-shadow:0 4px 16px rgba(0,0,0,0.06);
+  background:#fff;
+}
+
+/* painel / caixa rolável */
+.notes-panel{
+  margin-top:8px;
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:8px;
+  background:#fff;
+  max-height:320px;
+  overflow:auto;
+  box-shadow:0 6px 22px rgba(0,0,0,0.06);
 }
 .notes-controls-top{
   display:flex;
   gap:8px;
-  margin-bottom:8px;
+  padding:8px;
+  border-bottom:1px solid rgba(0,0,0,0.04);
 }
-.small-link{
-  padding:8px 12px;
-  border-radius:8px;
-  border:1px solid rgba(0,0,0,0.12);
-  background:white;
+.notes-categories{ padding:8px; display:flex; flex-direction:column; gap:6px; }
+.note-category{ border-radius:6px; overflow:hidden; }
+.note-category .cat-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 10px;
+  background:transparent;
+  font-weight:700;
   font-size:14px;
-  font-weight:600;
 }
-/* notas */
+.note-list{ display:flex; flex-direction:column; }
 .note-row{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:8px 10px;
-  border-left:4px solid transparent;
+  padding:10px;
   cursor:pointer;
+  transition:background .12s;
+  border-left:4px solid transparent;
 }
-.note-row .label-text{
-  font-size:13px;
-  padding-left:24px;
-  position:relative;
+.note-row.checked{
+  background:rgba(0,0,0,0.06);
+  border-left-color:var(--accent-dark);
 }
+.note-row input[type="checkbox"]{ position:absolute; opacity:0; pointer-events:none; }
+.note-row .label-text{ position:relative; padding-left:28px; flex:1; }
 .note-row .label-text::before{
   content:"";
   position:absolute;
   left:0;
   top:50%;
   transform:translateY(-50%);
-  width:14px;
-  height:14px;
+  width:18px;
+  height:18px;
   border-radius:50%;
-  border:2px solid #2E4D35;
-}
-.note-row.checked .label-text::before{
-  background:var(--text-dark);
-  border-color:var(--text-dark);
+  border:2px solid rgba(46,77,53,0.45);
+  background:#fff;
+  transition:all .12s;
+  display:inline-block;
 }
 .note-row .label-text::after{
   content:"✓";
   position:absolute;
-  left:1px;
+  left:2px;
   top:50%;
-  transform:translateY(-50%);
-  color:white;
-  font-size:10px;
+  transform:translateY(-50%) scale(.9);
+  color:#fff;
+  font-weight:700;
+  font-size:12px;
   opacity:0;
+  transition:opacity .12s;
 }
-.note-row.checked .label-text::after{opacity:1;}
+.note-row.checked .label-text::before{
+  background:var(--accent-dark);
+  border-color:var(--accent-dark);
+}
+.note-row.checked .label-text::after{ opacity:1; }
+.note-row + .note-row{ border-top:1px solid rgba(0,0,0,0.03); }
 
-/* ============================================================
-   MOBILE — CORREÇÃO GERAL
-============================================================ */
-@media(max-width:900px){
-  .nav{display:none;}
-  .menu-toggle{display:block;}
-  .brand{margin-left:78px;}
-  .shop-page{grid-template-columns:1fr;}
+@media (max-width:520px){
+  .notes-panel{ max-height:280px; }
+  .note-row .label-text{ padding-left:26px; }
+  .note-row .label-text::before{ width:16px; height:16px; left:0; }
+  .note-row .label-text::after{ left:1px; font-size:11px; }
 }
 
-@media(max-width:520px){
-  .container{padding:14px;}
+/* =========================
+   Small-link / buttons styles (dropdown controls)
+   ========================= */
+.notes-panel .small-link,
+.note-category .small-link,
+.notes-controls-top .small-link {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:8px;
+  font-weight:700;
+  font-size:13px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .12s ease, transform .06s ease, color .12s;
+  text-decoration:none;
+  border:1px solid rgba(46,77,53,0.09);
+  color:var(--text-dark);
+  background:#ffffff;
+}
+#notesSelectAllGlobal,
+.note-category .select-group {
+  background:transparent;
+  color:var(--text-dark);
+  border:1px solid rgba(46,77,53,0.12);
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:8px;
+}
+#notesClearAllGlobal,
+.note-category .clear-group {
+  background:transparent;
+  color:var(--text-dark);
+  border:1px solid rgba(46,77,53,0.12);
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:8px;
+}
+.notes-panel .small-link:focus,
+.note-category .small-link:focus{
+  outline:3px solid rgba(94,140,97,0.14);
+  outline-offset:2px;
+}
+.notes-controls-top{ align-items:center; justify-content:space-between; gap:10px; }
 
-  .brand-logo{width:56px;height:56px;}
-  .brand{font-size:20px;}
+@media (max-width:520px){
+  .notes-controls-top{ flex-direction:column; align-items:stretch; gap:8px; padding:10px; }
+  .notes-controls-top .small-link{ width:100%; justify-content:center; }
+  .note-category .cat-title > div { display:flex; gap:6px; }
+}
 
-  .hero{padding:36px 0 24px;}
-  .hero h1{font-size:24px;}
-  .lead{font-size:14px;}
+/* icon before for visual hint (smaller) */
+#notesSelectAllGlobal::before,
+.note-category .select-group::before {
+  content:"⟲";
+  display:inline-block;
+  margin-right:4px;
+  font-weight:700;
+  color:var(--text-dark);
+  font-size:11px;
+}
+#notesClearAllGlobal::before,
+.note-category .clear-group::before {
+  content:"⟲";
+  display:inline-block;
+  margin-right:4px;
+  font-weight:700;
+  color:var(--text-dark);
+  font-size:11px;
+}
 
-  .grid{grid-template-columns:1fr;}
-  .card{min-height:260px;}
+/* smaller sizing adjustments */
+#notesSelectAllGlobal,
+#notesClearAllGlobal,
+.note-category .select-group,
+.note-category .clear-group {
+  padding:4px 8px !important;
+  font-size:12px !important;
+  border-radius:6px !important;
+}
 
-  .card img{height:140px;}
+/* font-size reduction for notes rows */
+.note-row .label-text {
+  font-size:13px;
+  padding-left:24px;
+}
+/* smaller circle */
+.note-row .label-text::before {
+  width:14px;
+  height:14px;
+  border-width:2px;
+}
+.note-row .label-text::after {
+  font-size:10px;
+  left:1px;
+}
+.note-row { padding:8px 10px; }
 
-  .buy-btn{
-    width:calc(100% - 24px);
-    max-width:420px;
-    height:44px;
-    font-size:15px;
+/* =========================
+   iOS / Safari fixes (avoid blue accents)
+   ========================= */
+
+/* remove native appearance and force theme colors (with compatibility) */
+.filter-btn,
+.small-link,
+.menu-toggle,
+.icon-link,
+.nav a {
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  color:var(--text-dark) !important;
+  background:transparent;
+  text-decoration:none;
+
+  /* compatibility for text-decoration color */
+  text-decoration-color: currentColor;
+  -webkit-text-decoration-color: currentColor;
+}
+
+/* remove tap highlight */
+*{ -webkit-tap-highlight-color: rgba(0,0,0,0); }
+
+/* avoid iOS auto-coloring of links/phone numbers */
+a, a:link, a:visited {
+  text-decoration-color: currentColor;
+  -webkit-text-decoration-color: currentColor;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* focus styles (replace default blue ring) */
+.filter-btn:focus,
+.small-link:focus,
+.icon-link:focus,
+.nav a:focus,
+.menu-toggle:focus {
+  outline:none;
+  box-shadow:0 0 0 4px rgba(94,140,97,0.12);
+  border-radius:10px;
+}
+
+/* ensure buttons/inputs follow our styles */
+input, button {
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+/* --------------------------------
+   End of stylesheet
+   -------------------------------- */
+
+
+/* ===== overrides added by assistant: circular black logo + remove notes background ===== */
+
+/* header brand and circular logo */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.brand-logo{
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  /* force image to black (useful if PNG/JPG color). If you prefer actual pure-black asset, remove this. */
+  filter: brightness(0) saturate(100%);
+}
+
+/* remove selection "panel" when a note is checked, keep only the circular check */
+.note-row.checked{
+  background: transparent !important;
+  border-left-color: transparent !important;
+}
+
+/* ensure the check circle fills with a dark color (black) when selected */
+.note-row.checked .label-text::before{
+  background: var(--text-dark);
+  border-color: var(--text-dark);
+}
+
+/* slightly reduce prominence of note rows hover to keep look minimal */
+.note-row:hover{ background: transparent; }
+
+
+
+
+/* ===== fixes: keep buy button aligned and clamp long titles ===== */
+
+/* Make card a column flex so content can stretch and button stays at bottom */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 340px; /* ensures cards have similar height */
+  gap: 12px;
+}
+
+/* Ensure image occupies a fixed area */
+.card img {
+  height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Title clamp: limit to 2 lines and add ellipsis for long names */
+.card h3 {
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.4em; /* ensures space reserved for 2 lines */
+}
+
+/* Keep price and other info grouped */
+.card .price {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* Guarantee buy button stays at the bottom of the card and centered */
+.buy-btn {
+  align-self: center;
+  margin-top: auto;
+  width: 130px;
+  height: 40px;
+  background: var(--accent-dark);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .12s, background .12s;
+}
+.buy-btn:hover { transform: translateY(-2px); background: #4c6e4e; }
+
+/* small screens: adjust card/min-height and image size */
+@media (max-width: 520px){
+  .card { min-height: 260px; }
+  .card img { height: 140px; }
+  .buy-btn { width: 110px; height: 36px; font-size: 14px; }
+}
+
+/* ===== Mobile polish overrides - cole no final do styles.css ===== */
+
+/* reduz o padding global no mobile para aproveitar mais espaço */
+@media (max-width: 520px) {
+  .container { padding: 14px; }
+
+  /* header compacto */
+  .header-inner { padding: 10px 0; gap: 8px; }
+  .brand-logo {
+    width:56px;
+    height:56px;
+    border-radius:50%;
+  }
+  .brand { font-size:20px; }
+
+  /* hero mais enxuto */
+  .hero { padding:36px 0 24px; }
+  .hero h1 { font-size:24px; margin-bottom:6px; }
+  .lead { font-size:14px; }
+
+  /* grid de produtos: 1 coluna, gap maior vertical */
+  .grid.products {
+    grid-template-columns: 1fr !important;
+    gap:16px;
   }
 
-  .notes-panel{max-height:260px;}
-  .note-row{padding:10px;}
-  .note-row .label-text{font-size:14px;}
+  /* cards mais compactos e com melhor espaçamento */
+  .card {
+    min-height: 220px;
+    padding:12px;
+    border-radius:10px;
+  }
+  .card img { height:140px; object-fit:cover; border-radius:8px; }
 
-  /* Mobile Nav suave */
-  .mobile-nav{
+  .card h3 { font-size:16px; -webkit-line-clamp:2; min-height:2.2em; }
+  .card .price { font-size:15px; margin-top:8px; }
+
+  /* botão de compra maior e fácil de tocar */
+  .buy-btn {
+    width: calc(100% - 24px);
+    max-width:420px;
+    height:44px;
+    border-radius:999px;
+    font-size:15px;
+    margin:12px auto 0;
+  }
+
+  /* footer: espaçamento reduzido */
+  .footer-center { padding:14px 0; }
+
+  /* mobile nav: transform/transition para abertura suave */
+  .mobile-nav {
     display:block;
     max-height:0;
     overflow:hidden;
-    transition:max-height .32s ease, opacity .32s;
+    transition: max-height .32s cubic-bezier(.2,.9,.3,1), opacity .32s;
     opacity:0;
+    padding:0 16px;
   }
-  .mobile-nav[aria-hidden="false"]{
-    max-height:420px;
+  .mobile-nav[aria-hidden="false"] {
+    max-height:420px; /* o suficiente para links */
     opacity:1;
+    padding:12px 16px;
   }
+  .mobile-nav a { padding:12px 0; font-size:16px; }
+
+  /* notes panel: melhor aproveitamento vertical e controles full width */
+  .notes-panel { max-height: 260px; }
+  .notes-controls-top { padding:10px; flex-direction:column; gap:8px; }
+  .notes-controls-top .small-link { width:100%; justify-content:center; }
+
+  /* checkbox area: espaçamento e toque maior */
+  .note-row { padding:12px; }
+  .note-row .label-text { font-size:14px; padding-left:28px; }
+
+  /* destaque visual mais limpo — removi o background cheio (já feito no CSS principal) */
+  .note-row.checked { border-left-color: transparent; }
+
+  /* floating WhatsApp CTA (opcional) */
+  .floating-whatsapp {
+    position: fixed;
+    right: 16px;
+    bottom: 18px;
+    z-index: 120;
+    display: inline-flex;
+    align-items:center;
+    gap:10px;
+    background: #25D366;
+    color: #fff;
+    padding:12px 14px;
+    border-radius:999px;
+    box-shadow: 0 8px 24px rgba(37,211,102,0.18);
+    font-weight:700;
+    text-decoration:none;
+    transform: translateY(0);
+    transition: transform .12s, box-shadow .12s;
+  }
+  .floating-whatsapp:active { transform: translateY(2px); box-shadow: none; }
 }
 
-/* iOS fix */
-*{-webkit-tap-highlight-color:transparent;}
+/* small improvement: invisible focus ring but accessible */
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-nav,
+  .notes-panel { transition: max-height .32s cubic-bezier(.2,.9,.3,1), opacity .28s; }
+}
+
+
+/* === Mobile & UI Fixes Added by ChatGPT === */
+
+/* Bigger hamburger and corrected X */
+@media (max-width:900px){
+  .menu-toggle{
+    display:block;
+    position:absolute;
+    left:10px;
+    top:50%;
+    transform:translateY(-50%);
+    width:60px;
+    height:60px;
+    padding:10px;
+  }
+  .menu-toggle::before,
+  .menu-toggle::after,
+  .menu-toggle span{
+    content:"";
+    display:block;
+    width:32px;
+    height:5px;
+    border-radius:4px;
+    background:var(--text-dark);
+    margin:7px 0;
+    transition:.18s;
+  }
+  .menu-toggle[aria-expanded="true"]::before{
+    transform:translateY(10px) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded="true"]::after{
+    transform:translateY(-10px) rotate(-45deg);
+  }
+  .menu-toggle[aria-expanded="true"] span{
+    opacity:0;
+  }
+  .brand{ margin-left:78px; }
+}
+
+/* fix images cutting */
+.card img{
+  object-fit:contain !important;
+}
+
+/* notes: adjusted size & spacing */
+.note-row .label-text{
+  font-size:14px !important;
+}
+.notes-panel{
+  max-height:280px !important;
+}
+
+/* remove extra scroll at bottom */
+html,body{
+  overscroll-behavior-y:contain;
+}
