@@ -319,3 +319,12 @@ html,body{
     height:45px;
   }
 }
+@media(max-width:600px){
+  .notes-panel{
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+.menu-toggle {
+  color: var(--text-dark) !important;
+}
