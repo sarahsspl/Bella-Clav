@@ -20,7 +20,7 @@ const produtos = [
   },
   {
     id: 3,
-    nome: "Perfume Lacoste Pour Elle Magnetic",
+    nome: "Perfume Lacoste Pour Elle Magnetic.png",
     preco: 110.00,
     aroma: "amadeirado",
     notas: ["Maçã","Especiarias","Amora","Mandarina","Algodão-Doce","Macarrons","Lírio-do-Vale","Almíscar","Madeira de Cashmere","Vetiver","Patchouli"],
