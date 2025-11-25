@@ -398,3 +398,62 @@ function populateProductPage(id){
     });
   });
 })();
+
+/* ===== pequenos ajustes JS para o menu mobile e acessibilidade =====
+   - garante aria-expanded/aria-hidden coerentes para usar as transições CSS acima
+   - fecha menu ao clicar num link (já existia, mas reforçamos)
+   - se preferir manter a versão antiga do menu, esse script é compatível
+================================================================== */
+(function(){
+  const menuToggle = document.querySelector(".menu-toggle");
+  const mobileNav = document.getElementById("mobileNav");
+  if(!menuToggle || !mobileNav) return;
+
+  // cria um span interno caso o HTML use o caractere "☰" (assim as barras aparecem via CSS)
+  if(!menuToggle.querySelector("span")){
+    const s = document.createElement("span");
+    menuToggle.innerHTML = ""; // remove o símbolo textual
+    menuToggle.appendChild(s);
+  }
+
+  // garantir estado inicial
+  menuToggle.setAttribute("aria-expanded", "false");
+  mobileNav.setAttribute("aria-hidden", "true");
+
+  function abrirMenu(){
+    const aberto = mobileNav.getAttribute("aria-hidden") === "false";
+    const novoAberto = !aberto;
+    mobileNav.setAttribute("aria-hidden", String(!novoAberto));
+    menuToggle.setAttribute("aria-expanded", String(novoAberto));
+    // controle visual (para compatibilidade com o CSS que usa aria-hidden)
+    if(novoAberto){
+      mobileNav.style.display = "block";
+      // forçar foco no primeiro link para acessibilidade
+      const primeiro = mobileNav.querySelector("a");
+      if(primeiro) primeiro.focus();
+    } else {
+      mobileNav.style.display = "none";
+    }
+  }
+
+  menuToggle.addEventListener("click", abrirMenu);
+
+  // fecha ao clicar em link dentro do menu (útil em mobile)
+  mobileNav.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      mobileNav.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+      mobileNav.style.display = "none";
+    });
+  });
+
+  // previne que cliques acidentais fora do menu deixem algo estranho
+  document.addEventListener("click", (e) => {
+    const alvo = e.target;
+    if(!menuToggle.contains(alvo) && !mobileNav.contains(alvo)){
+      mobileNav.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+      mobileNav.style.display = "none";
+    }
+  });
+})();
