@@ -554,3 +554,107 @@ input, button {
 /* --------------------------------
    End of stylesheet
    -------------------------------- */
+
+
+/* ===== overrides added by assistant: circular black logo + remove notes background ===== */
+
+/* header brand and circular logo */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.brand-logo{
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  /* force image to black (useful if PNG/JPG color). If you prefer actual pure-black asset, remove this. */
+  filter: brightness(0) saturate(100%);
+}
+
+/* remove selection "panel" when a note is checked, keep only the circular check */
+.note-row.checked{
+  background: transparent !important;
+  border-left-color: transparent !important;
+}
+
+/* ensure the check circle fills with a dark color (black) when selected */
+.note-row.checked .label-text::before{
+  background: var(--text-dark);
+  border-color: var(--text-dark);
+}
+
+/* slightly reduce prominence of note rows hover to keep look minimal */
+.note-row:hover{ background: transparent; }
+
+
+
+
+/* ===== fixes: keep buy button aligned and clamp long titles ===== */
+
+/* Make card a column flex so content can stretch and button stays at bottom */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 340px; /* ensures cards have similar height */
+  gap: 12px;
+}
+
+/* Ensure image occupies a fixed area */
+.card img {
+  height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Title clamp: limit to 2 lines and add ellipsis for long names */
+.card h3 {
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.4em; /* ensures space reserved for 2 lines */
+}
+
+/* Keep price and other info grouped */
+.card .price {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* Guarantee buy button stays at the bottom of the card and centered */
+.buy-btn {
+  align-self: center;
+  margin-top: auto;
+  width: 130px;
+  height: 40px;
+  background: var(--accent-dark);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .12s, background .12s;
+}
+.buy-btn:hover { transform: translateY(-2px); background: #4c6e4e; }
+
+/* small screens: adjust card/min-height and image size */
+@media (max-width: 520px){
+  .card { min-height: 260px; }
+  .card img { height: 140px; }
+  .buy-btn { width: 110px; height: 36px; font-size: 14px; }
+}
