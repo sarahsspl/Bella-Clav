@@ -275,3 +275,37 @@ html,body{
     display:none;
   }
 }
+.product-notes {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.product-notes li {
+  background: rgba(34, 75, 53, 0.08); /* tom claro */
+  color: #1f5e3f;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+/* forçar cor dos links (altere a cor pra sua paleta) */
+a, a:visited, a:active {
+  color: #1f5e3f; /* cor desejada, ex. verde escuro */
+  text-decoration: none; /* ou underline se quiser */
+  -webkit-text-decoration-color: #1f5e3f;
+}
+
+/* botões/tags que possam virar link no iOS */
+a.button, .btn {
+  -webkit-appearance: none; /* evita estilos nativos no iOS */
+}
+
+/* se quiser que telefones ainda sejam clicáveis mas com estilo personalizado */
+a[href^="tel:"] {
+  color: #1f5e3f;
+  text-decoration: none;
+}
