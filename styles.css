@@ -240,6 +240,10 @@ html,body{
 
 /* MOBILE CORRECTIONS */
 @media(max-width:600px){
+  .filters{
+    display:block;
+    margin-bottom: 16px;
+  }
 
   .container{ padding:12px; }
 
@@ -292,20 +296,26 @@ html,body{
   font-size: 0.9rem;
 }
 
-/* forçar cor dos links (altere a cor pra sua paleta) */
-a, a:visited, a:active {
-  color: #1f5e3f; /* cor desejada, ex. verde escuro */
-  text-decoration: none; /* ou underline se quiser */
-  -webkit-text-decoration-color: #1f5e3f;
-}
-
-/* botões/tags que possam virar link no iOS */
-a.button, .btn {
-  -webkit-appearance: none; /* evita estilos nativos no iOS */
-}
-
-/* se quiser que telefones ainda sejam clicáveis mas com estilo personalizado */
-a[href^="tel:"] {
-  color: #1f5e3f;
+/* ESTILO DOS LINKS DO FOOTER (Instagram / Whatsapp) */
+.icon-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background .2s;
+}
+
+.icon-link:hover {
+  background: rgba(0,0,0,0.07);
+}
+
+@media(max-width:600px){
+  .brand-logo{
+    width:45px;
+    height:45px;
+  }
 }
