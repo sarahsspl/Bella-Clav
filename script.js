@@ -59,7 +59,9 @@ const produtos = [
 /* Número do WhatsApp */
 const WHATSAPP_NUMBER = "5593992414794";
 
-function formatarPreco(v){ return "R$ " + v.toFixed(2).replace(".", ","); }
+function formatarPreco(v){ 
+  return "R$ " + v.toFixed(2).replace(".", ","); 
+}
 
 function renderizarProdutos(filtroAroma = "todos", filtroNotas = []){
   const container = document.getElementById("products") || document.getElementById("featured");
@@ -154,6 +156,7 @@ function renderNotasDropdown() {
       const safeId = `note_${idx}_${item.replace(/[^a-zA-Z0-9_-]/g,'_')}`;
       const row = document.createElement('label');
       row.className = 'note-row';
+      row.dataset.item = item.toLowerCase(); // usado na busca
       row.innerHTML = `
         <input type="checkbox" class="note-checkbox" id="${safeId}" value="${item}">
         <span class="label-text">${item}</span>
@@ -173,6 +176,20 @@ function renderNotasDropdown() {
     c.appendChild(list);
     container.appendChild(c);
   });
+
+  // mensagem de "nenhuma nota encontrada"
+  let noneMsg = document.getElementById('noNotesFound');
+  if(!noneMsg){
+    noneMsg = document.createElement('div');
+    noneMsg.id = 'noNotesFound';
+    noneMsg.textContent = 'Nenhuma nota encontrada.';
+    noneMsg.style.padding = '8px 10px';
+    noneMsg.style.fontWeight = '600';
+    noneMsg.style.display = 'none';
+  } else {
+    noneMsg.style.display = 'none';
+  }
+  container.appendChild(noneMsg);
 
   document.querySelectorAll('.select-group').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -203,10 +220,28 @@ function renderNotasDropdown() {
 
 function notesSearch(q){
   q = (q||'').toLowerCase().trim();
-  document.querySelectorAll('.note-row').forEach(r => {
-    const txt = r.innerText.toLowerCase();
-    r.style.display = txt.indexOf(q) !== -1 ? 'flex' : 'none';
+  const categories = document.querySelectorAll('.note-category');
+  let anyVisible = false;
+
+  categories.forEach(cat => {
+    const rows = Array.from(cat.querySelectorAll('.note-row'));
+    let catHasMatch = false;
+
+    rows.forEach(r => {
+      const txt = (r.dataset.item || r.innerText).toLowerCase();
+      const match = !q || txt.indexOf(q) !== -1;
+      r.style.display = match ? 'flex' : 'none';
+      if (match) catHasMatch = true;
+    });
+
+    cat.style.display = catHasMatch ? 'block' : 'none';
+    if (catHasMatch) anyVisible = true;
   });
+
+  const noneMsg = document.getElementById('noNotesFound');
+  if(noneMsg){
+    noneMsg.style.display = anyVisible ? 'none' : 'block';
+  }
 }
 
 function setupNotesControls(){
@@ -290,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* AROMA FILTERS */
+  /* AROMA FILTERS (se não existir mais no HTML, isso só não faz nada) */
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -336,3 +371,30 @@ function populateProductPage(id){
 
   document.getElementById("buyNow").addEventListener("click", () => abrirWhatsApp(p.id));
 }
+
+/* Mobile nav: usa aria-expanded + animação suave e fecha ao clicar em um link */
+(function(){
+  const menuToggle = document.querySelector(".menu-toggle");
+  const mobileNav = document.getElementById("mobileNav");
+  if(!menuToggle || !mobileNav) return;
+
+  // inicializa
+  mobileNav.setAttribute("aria-hidden", "true");
+  menuToggle.setAttribute("aria-expanded", "false");
+
+  menuToggle.addEventListener("click", () => {
+    const hidden = mobileNav.getAttribute("aria-hidden") === "true";
+    mobileNav.setAttribute("aria-hidden", String(!hidden));
+    menuToggle.setAttribute("aria-expanded", String(hidden));
+    // para acessibilidade: rolar o topo do menu ao abrir
+    if(hidden) mobileNav.scrollTop = 0;
+  });
+
+  // fecha o menu ao clicar em qualquer link (útil no mobile)
+  mobileNav.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      mobileNav.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+})();
