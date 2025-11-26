@@ -61,9 +61,28 @@
     </aside>
 
     <section class="products-wrap">
-      <h2>Produtos</h2>
-      <div id="products" class="grid products"></div>
-    </section>
+  <div class="products-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <h2 style="margin:0;font-size:20px;">Produtos</h2>
+
+    <!-- botão visível no mobile (desktop ignora pois sidebar já aparece) -->
+    <button id="filtersToggle" class="filters-toggle" aria-expanded="false" style="
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:8px;
+      border:1px solid rgba(0,0,0,0.06);
+      background:#fff;
+      cursor:pointer;
+      font-weight:700;
+    ">
+      Filtros
+    </button>
+  </div>
+
+  <div id="products" class="grid products"></div>
+</section>
+
   </main>
 
   <footer id="contact">
