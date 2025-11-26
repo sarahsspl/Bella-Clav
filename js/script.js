@@ -193,7 +193,7 @@ function populateProductPage(id){
   if(buyNow) buyNow.addEventListener("click", ()=> abrirWhatsApp(p.id));
 }
 
-/* Mobile nav (igual, robusto) */
+/* Mobile nav */
 function initMobileNav(){
   const menuToggle = document.querySelector(".menu-toggle");
   const mobileNav = document.getElementById("mobileNav");
@@ -215,231 +215,74 @@ function initMobileNav(){
   }));
 }
 
-/* =========================
-   MOBILE NOTES: floating button + modal (robusto)
-   - cria botão flutuante
-   - cria modal/backdrop
-   - clona conteúdo das notas (ou renderiza fresh)
-   - sincroniza modal <-> desktop
-   - fecha ao rolar
-   ========================= */
-function setupMobileNotesModal(){
-  const isMobile = window.matchMedia && window.matchMedia("(max-width:720px)").matches;
-  if(!isMobile) return;
+/* setupMobileNotesModal - REMOVIDO: não criamos floating/modal aqui.
+   Mantemos apenas a função que sincroniza (se houver notesCategories rendered). */
 
-  // floating button
-  let floating = document.querySelector('.floating-filter');
-  if(!floating){
-    floating = document.createElement('button');
-    floating.className = 'floating-filter';
-    floating.id = 'floatingFilterBtn';
-    floating.type = 'button';
-    floating.innerHTML = 'Filtrar Notas ▾';
-    document.body.appendChild(floating);
+/* Restaurar comportamento: notes no topo apenas na Loja */
+(function enableShopTopNotes(){
+  function isShopPath() {
+    const p = (window.location.pathname || "").toLowerCase();
+    return p.includes("/loja") || p.includes("/shop") || p.includes("loja.html") || p.includes("shop.html");
   }
 
-  // backdrop + modal
-  let backdrop = document.querySelector('.notes-modal-backdrop');
-  if(!backdrop){
-    backdrop = document.createElement('div');
-    backdrop.className = 'notes-modal-backdrop';
-    backdrop.id = 'notesModalBackdrop';
-    backdrop.innerHTML = `
-      <div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle" tabindex="-1">
-        <div class="modal-header" style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="modal-title" id="notesModalTitle">Filtrar por Notas</div>
-          <button class="close-modal" aria-label="Fechar" type="button">✕</button>
-        </div>
-        <div class="modal-body" style="padding-top:10px;">
-          <input id="notesSearchModal" class="notes-search" placeholder="Buscar nota..." />
-          <div id="notesCategoriesModal" class="notes-categories" style="padding-top:12px;"></div>
-          <div style="display:flex; gap:8px; margin-top:12px;">
-            <button id="notesSelectAllModal" class="small-link" type="button" style="flex:1">Selecionar Tudo</button>
-            <button id="notesClearAllModal" class="small-link" type="button" style="flex:1">Limpar Tudo</button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(backdrop);
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    if(isShopPath()){
+      document.body.classList.add('page-loja');
 
-  const modal = backdrop.querySelector('.notes-modal');
-  const closeBtn = backdrop.querySelector('.close-modal');
-  const searchModal = document.getElementById('notesSearchModal');
-  const categoriesModalContainer = document.getElementById('notesCategoriesModal');
+      // remover qualquer floating/modal remanescente que possa existir
+      const floating = document.querySelector('.floating-filter');
+      if(floating) floating.remove();
+      const backdrop = document.querySelector('.notes-modal-backdrop');
+      if(backdrop) backdrop.remove();
+      const modal = document.querySelector('.notes-modal');
+      if(modal) modal.remove();
 
-  const desktopNotes = document.getElementById('notesCategories');
-  if(desktopNotes){
-    categoriesModalContainer.innerHTML = desktopNotes.innerHTML;
-  } else {
-    try{ renderNotasDropdown(); }catch(e){}
-    const d = document.getElementById('notesCategories');
-    categoriesModalContainer.innerHTML = d ? d.innerHTML : '';
-  }
-
-  // attach handlers
-  function attachModalHandlers(){
-    categoriesModalContainer.querySelectorAll('.select-group').forEach(btn => {
-      btn.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        const idx = btn.dataset.idx;
-        const group = categoriesModalContainer.querySelectorAll('.note-category')[idx];
-        if(!group) return;
-        group.querySelectorAll('.note-list input[type="checkbox"]').forEach(cb => {
-          cb.checked = true; cb.closest('.note-row').classList.add('checked');
-        });
+      // garantir que o painel de notas esteja visível e no topo (remover hides inline)
+      document.querySelectorAll('.notes-panel, .notes-dropdown, #notesPanel, #notesCategories, .filters').forEach(el => {
+        if(!el) return;
+        el.style.display = '';
+        el.style.visibility = '';
+        el.style.maxHeight = '';
+        el.style.height = '';
+        el.style.overflow = '';
+        el.style.pointerEvents = '';
+        el.style.position = 'static';
       });
-    });
-    categoriesModalContainer.querySelectorAll('.clear-group').forEach(btn => {
-      btn.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        const idx = btn.dataset.idx;
-        const group = categoriesModalContainer.querySelectorAll('.note-category')[idx];
-        if(!group) return;
-        group.querySelectorAll('.note-list input[type="checkbox"]').forEach(cb => {
-          cb.checked = false; cb.closest('.note-row').classList.remove('checked');
-        });
-      });
-    });
 
-    categoriesModalContainer.querySelectorAll('.note-row').forEach(row => {
-      row.addEventListener('click', (ev) => {
-        if(ev.target.tagName.toLowerCase() === 'button') return;
-        const cb = row.querySelector('input[type="checkbox"]');
-        if(!cb) return;
-        cb.checked = !cb.checked;
-        row.classList.toggle('checked', cb.checked);
-      });
-    });
-  }
-  attachModalHandlers();
-
-  function syncModalToDesktop(){
-    const desktop = document.getElementById('notesCategories');
-    if(!desktop) return;
-    const mapping = {};
-    categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
-      mapping[cb.value] = cb.checked;
-    });
-    desktop.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
-      if(typeof mapping[cb.value] !== 'undefined'){
-        cb.checked = mapping[cb.value];
-        cb.closest('.note-row').classList.toggle('checked', cb.checked);
-      }
-    });
-  }
-
-  function syncDesktopToModal(){
-    const desktop = document.getElementById('notesCategories');
-    if(!desktop) return;
-    const mapping = {};
-    desktop.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
-      mapping[cb.value] = cb.checked;
-    });
-    categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
-      if(typeof mapping[cb.value] !== 'undefined'){
-        cb.checked = mapping[cb.value];
-        cb.closest('.note-row').classList.toggle('checked', cb.checked);
-      } else {
-        cb.checked = false;
-        cb.closest('.note-row').classList.remove('checked');
-      }
-    });
-  }
-
-  function openModal(){
-    syncDesktopToModal();
-    backdrop.classList.add('open');
-    modal.classList.add('open');
-    document.body.classList.add('modal-open');
-    const f = backdrop.querySelector('#notesSearchModal');
-    if(f) f.focus();
-  }
-  function closeModal(){
-    syncModalToDesktop();
-    dispatchFilterUpdate();
-    modal.classList.remove('open');
-    backdrop.classList.remove('open');
-    document.body.classList.remove('modal-open');
-  }
-
-  floating.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', (e) => { if(e.target === backdrop) closeModal(); });
-
-  if(searchModal){
-    searchModal.addEventListener('input', function(){
-      const q = (this.value||"").toLowerCase().trim();
-      const cats = categoriesModalContainer.querySelectorAll('.note-category');
-      cats.forEach(cat => {
-        const rows = Array.from(cat.querySelectorAll('.note-row'));
-        let catHas = false;
-        rows.forEach(r => {
-          const txt = (r.dataset.item || r.innerText).toLowerCase();
-          const match = !q || txt.indexOf(q) !== -1;
-          r.style.display = match ? 'flex' : 'none';
-          if(match) catHas = true;
-        });
-        cat.style.display = catHas ? 'block' : 'none';
-      });
-    });
-  }
-
-  const selModal = document.getElementById('notesSelectAllModal');
-  const clrModal = document.getElementById('notesClearAllModal');
-  if(selModal){
-    selModal.addEventListener('click', () => {
-      categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
-        cb.checked = true; cb.closest('.note-row').classList.add('checked');
-      });
-      syncModalToDesktop(); dispatchFilterUpdate();
-    });
-  }
-  if(clrModal){
-    clrModal.addEventListener('click', () => {
-      categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
-        cb.checked = false; cb.closest('.note-row').classList.remove('checked');
-      });
-      syncModalToDesktop(); dispatchFilterUpdate();
-    });
-  }
-
-  // fechar ao rolar (debounced leve)
-  let lastScroll = 0;
-  window.addEventListener('scroll', () => {
-    if(!window.matchMedia("(max-width:720px)").matches) return;
-    const s = window.scrollY || window.pageYOffset;
-    if(Math.abs(s - lastScroll) > 20) {
-      closeModal();
-      lastScroll = s;
-    }
-  }, { passive: true });
-
-  // resize guard
-  window.addEventListener('resize', () => {
-    if(!window.matchMedia("(max-width:720px)").matches){
-      backdrop.classList.remove('open'); modal.classList.remove('open'); document.body.classList.remove('modal-open');
-      if(floating) floating.style.display = 'none';
     } else {
-      if(floating) floating.style.display = 'inline-flex';
-      attachModalHandlers();
+      document.body.classList.remove('page-loja');
     }
   });
 
-  // ensure floating visible on mobile init
-  if(window.matchMedia("(max-width:720px)").matches){
-    floating.style.display = 'inline-flex';
-  } else {
-    floating.style.display = 'none';
-  }
-}
+  window.addEventListener('popstate', () => {
+    if(isShopPath()) document.body.classList.add('page-loja');
+    else document.body.classList.remove('page-loja');
+  });
+
+})();
+
+/* Defensive: close any modal on scroll in mobile (safety) */
+(function mobileSafetyCloseOnScroll(){
+  let last = 0;
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY || window.pageYOffset;
+    if(Math.abs(s - last) > 20){
+      // remove any accidental overlays
+      const backdrop = document.querySelector('.notes-modal-backdrop');
+      const modal = document.querySelector('.notes-modal');
+      if(backdrop){ backdrop.classList.remove('open'); backdrop.style.display = 'none'; }
+      if(modal) modal.classList.remove('open');
+      document.body.classList.remove('modal-open');
+      last = s;
+    }
+  }, { passive: true });
+})();
 
 /* Início */
 document.addEventListener("DOMContentLoaded", () => {
   renderNotasDropdown();
   setupNotesControls();
   renderizarProdutos("todos", []);
-
   renderFeaturedExactly3();
 
   if(window.location.pathname.endsWith("/loja/produto.html")){
@@ -456,13 +299,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   initMobileNav();
-  setupMobileNotesModal();
 
-  // Defensive: ensure desktop notes are hidden on mobile (guardrail)
+  // Defensive guard: if mobile, ensure no desktop notes are visible by inline styles that might remain
   if(window.matchMedia("(max-width:720px)").matches){
     document.querySelectorAll('.notes-panel, .notes-dropdown, #notesPanel, #notesCategories').forEach(el=>{
-      if(el) { el.style.display = 'none'; el.style.visibility = 'hidden'; el.style.maxHeight = '0px'; el.style.overflow = 'hidden'; }
+      if(el) { el.style.display = ''; el.style.visibility = ''; el.style.maxHeight = ''; el.style.overflow = ''; }
     });
   }
-
 });
