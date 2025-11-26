@@ -372,65 +372,62 @@ function populateProductPage(id){
   document.getElementById("buyNow").addEventListener("click", () => abrirWhatsApp(p.id));
 }
 
+/* Mobile nav: usa aria-expanded + animação suave e fecha ao clicar em um link */
+(function(){
+  const menuToggle = document.querySelector(".menu-toggle");
+  const mobileNav = document.getElementById("mobileNav");
+  if(!menuToggle || !mobileNav) return;
 
-/* === Mobile Menu Fix Added === */
-(function () {
-  const menuToggle = document.querySelector('.menu-toggle');
-  const mobileNav = document.getElementById('mobileNav');
-  if (!menuToggle || !mobileNav) return;
+  // inicializa
+  mobileNav.setAttribute("aria-hidden", "true");
+  menuToggle.setAttribute("aria-expanded", "false");
 
-  if (!menuToggle.querySelector('span')) {
-    menuToggle.innerHTML = '';
-    const s = document.createElement('span');
-    menuToggle.appendChild(s);
-  }
-
-  menuToggle.setAttribute('aria-expanded', 'false');
-  mobileNav.setAttribute('aria-hidden', 'true');
-  mobileNav.style.display = 'none';
-
-  function setBodyScrollLock(lock) {
-    document.body.style.overflow = lock ? 'hidden' : '';
-    document.documentElement.style.overflow = lock ? 'hidden' : '';
-  }
-
-  function openMenu() {
-    menuToggle.setAttribute('aria-expanded', 'true');
-    mobileNav.setAttribute('aria-hidden', 'false');
-    mobileNav.style.display = 'block';
-    setBodyScrollLock(true);
-  }
-
-  function closeMenu() {
-    menuToggle.setAttribute('aria-expanded', 'false');
-    mobileNav.setAttribute('aria-hidden', 'true');
-    mobileNav.style.display = 'none';
-    setBodyScrollLock(false);
-  }
-
-  function toggleMenu() {
-    const aberto = menuToggle.getAttribute('aria-expanded') === 'true';
-    aberto ? closeMenu() : openMenu();
-  }
-
-  menuToggle.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleMenu();
+  menuToggle.addEventListener("click", () => {
+    const hidden = mobileNav.getAttribute("aria-hidden") === "true";
+    mobileNav.setAttribute("aria-hidden", String(!hidden));
+    menuToggle.setAttribute("aria-expanded", String(hidden));
+    // para acessibilidade: rolar o topo do menu ao abrir
+    if(hidden) mobileNav.scrollTop = 0;
   });
 
-  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  // fecha o menu ao clicar em qualquer link (útil no mobile)
+  mobileNav.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      mobileNav.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+})();
 
-  document.addEventListener('click', e => {
-    if (!menuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
-      closeMenu();
-    }
+/* ---------- Toggle para o painel de notas (mobile) ---------- */
+/* cole no final do script.js (antes do fechamento do arquivo) */
+
+(function setupNotesPanelToggle(){
+  const notesPanel = document.getElementById('notesPanel');       // painel
+  const notesHeader = document.querySelector('.notes-header');    // header clicável (input/search está dentro)
+  if(!notesPanel || !notesHeader) return;
+
+  // garantir atributo inicial (se não tiver)
+  if(!notesPanel.hasAttribute('aria-hidden')) notesPanel.setAttribute('aria-hidden', 'true');
+  notesHeader.setAttribute('role', 'button');
+  notesHeader.setAttribute('aria-expanded', 'false');
+
+  // ao clicar no header (ou na área da busca) alterna
+  notesHeader.addEventListener('click', (e) => {
+    // se o clique for dentro do campo de busca (input) não fecha/abre acidentalmente
+    if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON')) return;
+
+    const hidden = notesPanel.getAttribute('aria-hidden') === 'true';
+    notesPanel.setAttribute('aria-hidden', String(!hidden));
+    notesHeader.setAttribute('aria-expanded', String(hidden));
   });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeMenu();
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 900) closeMenu();
-  });
+  // se o usuário focar no campo de busca forçamos o painel a abrir (ótimo pra UX)
+  const notesSearch = document.getElementById('notesSearchMain');
+  if(notesSearch){
+    notesSearch.addEventListener('focus', () => {
+      notesPanel.setAttribute('aria-hidden', 'false');
+      notesHeader.setAttribute('aria-expanded', 'true');
+    });
+  }
 })();
