@@ -1,3 +1,8 @@
+/* =========================
+   Produtos, filtros e UI
+   (versão integrada com modal de notas no mobile)
+   ========================= */
+
 /* Lista de produtos (exemplo) */
 const produtos = [
   {
@@ -20,49 +25,23 @@ const produtos = [
   },
   {
     id: 3,
-    nome: "Perfume Lacoste Pour Elle Magnetic.png",
+    nome: "Perfume Lacoste Pour Elle Magnetic",
     preco: 110.00,
     aroma: "amadeirado",
     notas: ["Maçã","Especiarias","Amora","Mandarina","Algodão-Doce","Macarrons","Lírio-do-Vale","Almíscar","Madeira de Cashmere","Vetiver","Patchouli"],
     imagem: "img/lacostepourellemagnetic.png",
     descricao: "Notas amadeiradas e almiscaradas."
   }
-//  {
-//    id: 4,
-//    nome: "Sunlit Amber",
-//    preco: 150.00,
-//    aroma: "âmbar",
-//   notas: ["Âmbar","Baunilha","Cítrico"],
-//    imagem: "images/placeholder4.jpg",
-//    descricao: "Âmbar com frescor cítrico."
-//  },
-// {
-//   id: 5,
-//   nome: "Citrus Whirl",
-//   preco: 95.00,
-//   aroma: "cítrico",
-//    notas: ["Cítrico","Lavanda"],
-//    imagem: "images/placeholder5.jpg",
-//    descricao: "Explosão cítrica leve."
-//  }
-//  {
-//    id: 6,
-//    nome: "Floral Veil",
-//    preco: 120.00,
-//    aroma: "floral",
-//    notas: ["Rosas","Lavanda"],
-//    imagem: "images/placeholder6.jpg",
-//   descricao: "Floral suave e fresco."
-//  }
 ];
 
 /* Número do WhatsApp */
 const WHATSAPP_NUMBER = "5593992414794";
 
-function formatarPreco(v){ 
-  return "R$ " + v.toFixed(2).replace(".", ","); 
+function formatarPreco(v){
+  return "R$ " + v.toFixed(2).replace(".", ",");
 }
 
+/* Renderizar produtos em container #products (ou #featured) */
 function renderizarProdutos(filtroAroma = "todos", filtroNotas = []){
   const container = document.getElementById("products") || document.getElementById("featured");
   if(!container) return;
@@ -107,31 +86,18 @@ function abrirWhatsApp(id){
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
 }
 
-/* ========================= Dropdown de Notas ========================= */
-
+/* ========================= Dropdown de Notas — dados e render */
 const notasCategoriasDropdown = [
   { titulo: "🌿 Notas Cítricas", itens: ["Bergamota","Limão siciliano","Lima","Laranja","Mandarina / Tangerina"] },
   { titulo: "🌸 Notas Florais — Brancos", itens: ["Jasmim","Gardênia","Tuberosa","Flor de laranjeira","Magnolia","Frangipani","Tiaré"] },
   { titulo: "🌸 Notas Florais — Clássicos", itens: ["Rosa","Íris","Violeta","Lírio-do-vale (Muguet)","Camélia","Peônia","Lavanda"] },
-  { titulo: "🌸 Notas Florais — Exóticos", itens: ["Osmanthus","Champaca","Flor de hibisco","Flor de cerejeira"] },
-  { titulo: "🍓 Notas Frutadas", itens: ["Amora","Pêra","Maçã","Morango","Framboesa","Cassis (groselha preta)","Cereja","Clementina","Pêssego","Ameixa","Melão","Melancia","Abacaxi","Manga","Maracujá","Lichia","Coco","Figo"] },
-  { titulo: "🍭 Notas Doces", itens: ["Baunilha","Fava-tonka","Caramelo","Açúcar","Macarrons","Mel","Chocolate","Café","Marshmallow","Praliné","Amêndoas","Avelã","Leite condensado","Algodão-doce","Bolo / Cookie"] },
-  { titulo: "🌾 Notas Especiadas", itens: ["Canela","Cravo","Especiarias","Noz-moscada","Cardamomo","Gengibre","Pimenta rosa","Pimenta preta","Açafrão","Cúrcuma","Cominho"] },
-  { titulo: "🌿 Notas Herbais", itens: ["Hortelã","Manjericão","Alecrim","Sálvia","Erva-cidreira","Chá verde","Chá preto","Folhas verdes","Grama fresca","Eucalipto","Folha de Violeta"] },
-  { titulo: "🌊 Notas Aquáticas", itens: ["Notas marinhas","Notas ozônicas","Brisa aquática","Pepino","Melão aquático"] },
-  { titulo: "🌲 Notas Amadeiradas", itens: ["Cedro","Sândalo","Patchouli","Oud (Agarwood)","Vetiver","Guaiacwood","Cashmere","Pinho","Copaíba","Bétula"] },
-  { titulo: "🪵 Notas Ambaradas", itens: ["Âmbar","Benjoim","Mirra","Olíbano","Labdanum","Copaíba","Resinas doces"] },
-  { titulo: "🐾 Notas Animálicas", itens: ["Almíscar","Civeta","Castóreo","Ambergris"] },
-  { titulo: "🌍 Notas Terrosas", itens: ["Musgo de carvalho","Vetiver terroso","Terra molhada","Raiz de íris","Trufa"] },
-  { titulo: "🥥 Notas Cremosas", itens: ["Leite","Creme","Chantilly","Coco cremoso","Acorde de leite"] },
-  { titulo: "💨 Notas Aromáticas", itens: ["Lavanda","Sálvia","Alecrim","Tomilho","Manjerona"] },
-  { titulo: "🍂 Notas Tabacadas", itens: ["Tabaco doce","Folha de tabaco","Tabaco ambarado"] },
-  { titulo: "🍵 Chás e infusões", itens: ["Chá verde","Chá preto","Chá branco","Mate","Earl Grey"] },
-  { titulo: "🧊 Notas Frias", itens: ["Metal","Nota gelada","Menta fria","Aldeídos"] },
-  { titulo: "🔥 Notas Quentes", itens: ["Canela quente","Âmbar escuro","Baunilha balsâmica"] }
+  { titulo: "🍓 Notas Frutadas", itens: ["Amora","Pêra","Maçã","Morango","Framboesa","Cassis","Cereja","Clementina","Pêssego","Ameixa","Manga","Coco"] },
+  { titulo: "🍭 Notas Doces", itens: ["Baunilha","Fava-tonka","Caramelo","Açúcar","Macarrons","Mel","Chocolate","Café","Praliné"] },
+  { titulo: "🌲 Notas Amadeiradas", itens: ["Cedro","Sândalo","Patchouli","Oud","Vetiver","Pinho"] },
+  { titulo: "🪵 Notas Ambaradas", itens: ["Âmbar","Benjoim","Mirra","Olíbano"] }
 ];
 
-function renderNotasDropdown() {
+function renderNotasDropdown(){
   const container = document.getElementById('notesCategories');
   if(!container) return;
   container.innerHTML = '';
@@ -156,7 +122,7 @@ function renderNotasDropdown() {
       const safeId = `note_${idx}_${item.replace(/[^a-zA-Z0-9_-]/g,'_')}`;
       const row = document.createElement('label');
       row.className = 'note-row';
-      row.dataset.item = item.toLowerCase(); // usado na busca
+      row.dataset.item = item.toLowerCase();
       row.innerHTML = `
         <input type="checkbox" class="note-checkbox" id="${safeId}" value="${item}">
         <span class="label-text">${item}</span>
@@ -177,7 +143,7 @@ function renderNotasDropdown() {
     container.appendChild(c);
   });
 
-  // mensagem de "nenhuma nota encontrada"
+  // "nenhuma nota"
   let noneMsg = document.getElementById('noNotesFound');
   if(!noneMsg){
     noneMsg = document.createElement('div');
@@ -186,10 +152,10 @@ function renderNotasDropdown() {
     noneMsg.style.padding = '8px 10px';
     noneMsg.style.fontWeight = '600';
     noneMsg.style.display = 'none';
+    container.appendChild(noneMsg);
   } else {
     noneMsg.style.display = 'none';
   }
-  container.appendChild(noneMsg);
 
   document.querySelectorAll('.select-group').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -283,15 +249,10 @@ function dispatchFilterUpdate(){
   renderizarProdutos(aroma, notas);
 }
 
-function initNotasDropdown(){
-  renderNotasDropdown();
-  setupNotesControls();
-}
-
-/* ========================= Inicialização geral ========================= */
+/* ========================= Inicialização geral (DOM) ========================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* HOME – DESTAQUES COM BOTÃO DE COMPRAR */
+  /* HOME – DESTAQUES */
   const featured = document.getElementById("featured");
   if (featured) {
     produtos.slice(0, 3).forEach(p => {
@@ -311,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* MOBILE NAV */
+  /* MOBILE NAV toggle */
   const menuToggle = document.querySelector(".menu-toggle");
   const mobileNav = document.getElementById("mobileNav");
   if(menuToggle && mobileNav){
@@ -325,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* AROMA FILTERS (se não existir mais no HTML, isso só não faz nada) */
+  /* aroma filter buttons */
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -336,98 +297,252 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* PAGE: LOJA → render inicial */
+  /* LOJA: render inicial */
   if (document.getElementById("products")) {
     renderizarProdutos("todos", []);
   }
 
-  /* PAGE: PRODUTO INDIVIDUAL */
+  /* Produto individual */
   if(window.location.pathname.endsWith("product.html")){
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get("id"), 10) || produtos[0].id;
     populateProductPage(id);
   }
 
-  initNotasDropdown();
+  /* Notas dropdown (desktop) */
+  renderNotasDropdown();
+  setupNotesControls();
+
+  /* --- NEW: create floating filter button and modal for mobile --- */
+  setupMobileNotesModal();
+
+  /* defensive image adjustments: avoid very tall images creating huge space */
+  document.querySelectorAll('.card img').forEach(img => {
+    img.addEventListener('load', () => {
+      try{
+        if(img.naturalHeight && img.naturalWidth){
+          const ratio = img.naturalHeight / img.naturalWidth;
+          if(ratio > 2.2){ // very tall image
+            img.style.maxHeight = '420px';
+            img.style.objectFit = 'cover';
+            img.style.width = '100%';
+          } else {
+            img.style.objectFit = 'contain';
+          }
+        }
+      }catch(e){}
+    });
+  });
+
 });
 
-/* Produto individual */
+/* Produto individual populate */
 function populateProductPage(id){
   const p = produtos.find(x => x.id == id);
   if(!p) return;
 
-  document.getElementById("productImage").src = p.imagem;
-  document.getElementById("productName").innerText = p.nome;
-  document.getElementById("productPrice").innerText = formatarPreco(p.preco);
-  document.getElementById("productDesc").innerText = p.descricao;
+  const imgEl = document.getElementById("productImage");
+  if(imgEl) imgEl.src = p.imagem;
+  const nameEl = document.getElementById("productName");
+  if(nameEl) nameEl.innerText = p.nome;
+  const priceEl = document.getElementById("productPrice");
+  if(priceEl) priceEl.innerText = formatarPreco(p.preco);
+  const descEl = document.getElementById("productDesc");
+  if(descEl) descEl.innerText = p.descricao;
 
   const ul = document.getElementById("productNotes");
-  ul.innerHTML = "";
-  p.notas.forEach(n => {
-    const li = document.createElement("li");
-    li.textContent = n;
-    ul.appendChild(li);
-  });
-
-  document.getElementById("buyNow").addEventListener("click", () => abrirWhatsApp(p.id));
-}
-
-/* Mobile nav: usa aria-expanded + animação suave e fecha ao clicar em um link */
-(function(){
-  const menuToggle = document.querySelector(".menu-toggle");
-  const mobileNav = document.getElementById("mobileNav");
-  if(!menuToggle || !mobileNav) return;
-
-  // inicializa
-  mobileNav.setAttribute("aria-hidden", "true");
-  menuToggle.setAttribute("aria-expanded", "false");
-
-  menuToggle.addEventListener("click", () => {
-    const hidden = mobileNav.getAttribute("aria-hidden") === "true";
-    mobileNav.setAttribute("aria-hidden", String(!hidden));
-    menuToggle.setAttribute("aria-expanded", String(hidden));
-    // para acessibilidade: rolar o topo do menu ao abrir
-    if(hidden) mobileNav.scrollTop = 0;
-  });
-
-  // fecha o menu ao clicar em qualquer link (útil no mobile)
-  mobileNav.querySelectorAll("a").forEach(a => {
-    a.addEventListener("click", () => {
-      mobileNav.setAttribute("aria-hidden", "true");
-      menuToggle.setAttribute("aria-expanded", "false");
-    });
-  });
-})();
-
-/* ---------- Toggle para o painel de notas (mobile) ---------- */
-/* cole no final do script.js (antes do fechamento do arquivo) */
-
-(function setupNotesPanelToggle(){
-  const notesPanel = document.getElementById('notesPanel');       // painel
-  const notesHeader = document.querySelector('.notes-header');    // header clicável (input/search está dentro)
-  if(!notesPanel || !notesHeader) return;
-
-  // garantir atributo inicial (se não tiver)
-  if(!notesPanel.hasAttribute('aria-hidden')) notesPanel.setAttribute('aria-hidden', 'true');
-  notesHeader.setAttribute('role', 'button');
-  notesHeader.setAttribute('aria-expanded', 'false');
-
-  // ao clicar no header (ou na área da busca) alterna
-  notesHeader.addEventListener('click', (e) => {
-    // se o clique for dentro do campo de busca (input) não fecha/abre acidentalmente
-    if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON')) return;
-
-    const hidden = notesPanel.getAttribute('aria-hidden') === 'true';
-    notesPanel.setAttribute('aria-hidden', String(!hidden));
-    notesHeader.setAttribute('aria-expanded', String(hidden));
-  });
-
-  // se o usuário focar no campo de busca forçamos o painel a abrir (ótimo pra UX)
-  const notesSearch = document.getElementById('notesSearchMain');
-  if(notesSearch){
-    notesSearch.addEventListener('focus', () => {
-      notesPanel.setAttribute('aria-hidden', 'false');
-      notesHeader.setAttribute('aria-expanded', 'true');
+  if(ul){
+    ul.innerHTML = "";
+    p.notas.forEach(n => {
+      const li = document.createElement("li");
+      li.textContent = n;
+      ul.appendChild(li);
     });
   }
-})();
+
+  const buyNowBtn = document.getElementById("buyNow");
+  if(buyNowBtn) buyNowBtn.addEventListener("click", () => abrirWhatsApp(p.id));
+}
+
+/* =========================
+   MOBILE NOTES: floating button + modal
+   - on small screens the original notes-panel is hidden by CSS
+   - this script clones the notesCategories content into a modal for mobile use
+   ========================= */
+function setupMobileNotesModal(){
+  // only on mobile widths
+  const isMobile = window.matchMedia && window.matchMedia("(max-width:720px)").matches;
+  if(!isMobile) return;
+
+  // create floating button
+  let floating = document.querySelector('.floating-filter');
+  if(!floating){
+    floating = document.createElement('button');
+    floating.className = 'floating-filter';
+    floating.id = 'floatingFilterBtn';
+    floating.innerHTML = 'Filtrar Notas ▾';
+    document.body.appendChild(floating);
+  }
+
+  // create modal backdrop
+  let backdrop = document.querySelector('.notes-modal-backdrop');
+  if(!backdrop){
+    backdrop = document.createElement('div');
+    backdrop.className = 'notes-modal-backdrop';
+    backdrop.id = 'notesModalBackdrop';
+    backdrop.innerHTML = `
+      <div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle" tabindex="-1">
+        <div class="modal-header">
+          <div class="modal-title" id="notesModalTitle">Filtrar por Notas</div>
+          <button class="close-modal" aria-label="Fechar">✕</button>
+        </div>
+        <div class="modal-body">
+          <input id="notesSearchModal" class="notes-search" placeholder="Buscar nota..." />
+          <div id="notesCategoriesModal" class="notes-categories" style="padding-bottom:12px;"></div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button id="notesSelectAllModal" class="small-link" style="flex:1">Selecionar Tudo</button>
+            <button id="notesClearAllModal" class="small-link" style="flex:1">Limpar Tudo</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+  }
+
+  const modal = backdrop.querySelector('.notes-modal');
+  const closeBtn = backdrop.querySelector('.close-modal');
+  const searchModal = document.getElementById('notesSearchModal');
+  const categoriesModalContainer = document.getElementById('notesCategoriesModal');
+
+  // clone the desktop notesCategories into modal (if exists)
+  const desktopNotes = document.getElementById('notesCategories');
+  if(desktopNotes && categoriesModalContainer){
+    // clone content (deep)
+    categoriesModalContainer.innerHTML = desktopNotes.innerHTML;
+  } else {
+    // if no desktop container, render fresh
+    renderNotasDropdown();
+    const desktop = document.getElementById('notesCategories');
+    if(desktop) categoriesModalContainer.innerHTML = desktop.innerHTML;
+  }
+
+  // show/hide handlers
+  function openModal(){
+    backdrop.style.display = 'flex';
+    setTimeout(()=>{ modal.classList.add('open'); }, 10);
+    // focus first input for accessibility
+    const focusInput = backdrop.querySelector('#notesSearchModal');
+    if(focusInput) focusInput.focus();
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    setTimeout(()=>{ backdrop.style.display = 'none'; }, 240);
+  }
+
+  floating.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => {
+    if(e.target === backdrop) closeModal();
+  });
+
+  // wire up search within modal (search clones)
+  function modalNotesSearch(q){
+    q = (q||'').toLowerCase().trim();
+    const categories = categoriesModalContainer.querySelectorAll('.note-category');
+    let anyVisible = false;
+    categories.forEach(cat => {
+      const rows = Array.from(cat.querySelectorAll('.note-row'));
+      let catHasMatch = false;
+      rows.forEach(r => {
+        const txt = (r.dataset.item || r.innerText).toLowerCase();
+        const match = !q || txt.indexOf(q) !== -1;
+        r.style.display = match ? 'flex' : 'none';
+        if(match) catHasMatch = true;
+      });
+      cat.style.display = catHasMatch ? 'block' : 'none';
+      if(catHasMatch) anyVisible = true;
+    });
+    // optional: show none message
+  }
+  if(searchModal){
+    searchModal.addEventListener('input', ()=> modalNotesSearch(searchModal.value));
+  }
+
+  // select all / clear all modal
+  const selModal = document.getElementById('notesSelectAllModal');
+  const clrModal = document.getElementById('notesClearAllModal');
+  if(selModal){
+    selModal.addEventListener('click', () => {
+      categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+        cb.checked = true;
+        cb.closest('.note-row').classList.add('checked');
+      });
+      // copy selections back to desktop checkboxes (if present)
+      syncModalToDesktop();
+      dispatchFilterUpdate();
+    });
+  }
+  if(clrModal){
+    clrModal.addEventListener('click', () => {
+      categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.note-row').classList.remove('checked');
+      });
+      syncModalToDesktop();
+      dispatchFilterUpdate();
+    });
+  }
+
+  // clicking a row inside the modal toggles checkbox
+  categoriesModalContainer.addEventListener('click', (e) => {
+    const row = e.target.closest('.note-row');
+    if(!row) return;
+    const cb = row.querySelector('input[type="checkbox"]');
+    if(!cb) return;
+    cb.checked = !cb.checked;
+    row.classList.toggle('checked', cb.checked);
+    syncModalToDesktop();
+    dispatchFilterUpdate();
+  });
+
+  // ensure modal -> desktop sync: copies modal selections into original notesCategories
+  function syncModalToDesktop(){
+    const desktop = document.getElementById('notesCategories');
+    if(!desktop) return;
+    const mapping = {};
+    // build map from modal (value -> checked)
+    categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+      mapping[cb.value] = cb.checked;
+    });
+    // apply to desktop
+    desktop.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+      if(typeof mapping[cb.value] !== 'undefined'){
+        cb.checked = mapping[cb.value];
+        cb.closest('.note-row').classList.toggle('checked', cb.checked);
+      }
+    });
+  }
+
+  // when modal closes, keep it closed and keep selections
+  closeBtn.addEventListener('click', () => {
+    syncModalToDesktop();
+    closeModal();
+  });
+
+  // accessibility: close with ESC
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && backdrop.style.display === 'flex') closeModal();
+  });
+
+  // if window resized to desktop, remove floating button and hide modal
+  window.addEventListener('resize', () => {
+    if(!window.matchMedia("(max-width:720px)").matches){
+      backdrop.style.display = 'none';
+      if(floating) floating.style.display = 'none';
+    } else {
+      if(floating) floating.style.display = 'inline-flex';
+    }
+  });
+}
+
+/* End of script.js */
