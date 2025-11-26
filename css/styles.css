@@ -225,3 +225,40 @@ a:focus{ outline:3px solid rgba(27,106,66,0.12); outline-offset:3px; border-radi
   box-shadow: 0 10px 28px rgba(19,86,52,0.10);
 }
 #notesClearAllGlobal:active{ transform: translateY(0); }
+
+/* BOTÕES menores e mais chiques no mobile */
+@media (max-width: 720px) {
+  .buy-btn,
+  .view-btn,
+  .btn-ver,
+  .btn-comprar {
+    height: 38px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
+    padding: 0 14px !important;
+    width: auto !important;
+    min-width: 110px !important;
+  }
+
+  /* Se os seus botões estiverem lado a lado */
+  .product-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+/* FORÇA sumir COMPLETAMENTE o painel desktop de notas no MOBILE */
+@media (max-width: 720px) {
+  .filter-section,
+  .notes-dropdown,
+  .notes-panel,
+  #notesPanel,
+  #notesCategories {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+  }
+}
