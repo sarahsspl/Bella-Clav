@@ -252,46 +252,6 @@ a:focus{ outline:3px solid rgba(27,106,66,0.12); outline-offset:3px; border-radi
   .floating-filter * { color: #fff !important; }
 }
 
-/* FORÇA sumir COMPLETAMENTE o painel desktop de notas no MOBILE */
-@media (max-width: 720px) {
-  .filter-section,
-  .notes-dropdown,
-  .notes-panel,
-  #notesPanel,
-  #notesCategories,
-  .notes-controls-top,
-  .notes-categories,
-  .note-category,
-  .note-list {
-    display: none !important;
-    height: 0 !important;
-    max-height: 0 !important;
-    opacity: 0 !important;
-    overflow: hidden !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    position: static !important;
-  }
-
-  /* z-index guardrails para evitar sobreposições estranhas */
-  .card, .product-card, .grid, .products-grid {
-    position: relative !important;
-    z-index: 2 !important;
-    background-clip: padding-box;
-  }
-  .card h3, .card .price, .buy-btn, .view-btn {
-    position: relative !important;
-    z-index: 3 !important;
-  }
-
-  /* imagens: forçar contain e impedir overflow */
-  .card img { display:block !important; max-width:100% !important; height:auto !important; object-fit:contain !important; }
-
-  /* modal/backdrop z-index */
-  .notes-modal-backdrop { z-index: 240 !important; }
-  .notes-modal { z-index: 250 !important; }
-}
-
 /* ===== MOBILE modal + floating (apensar seguro) ===== */
 
 /* floating filter */
@@ -334,4 +294,70 @@ body.modal-open { height: 100%; overflow: hidden; touch-action: none; }
 /* final guard: remove inline sticky abuse */
 @media (max-width:720px){
   [style*="position: sticky"], [style*="position:fixed"]{ position: static !important; }
+}
+
+/* === Mostrar notas apenas na página Loja (comportamento restaurado) ===
+   - Por padrão as notas ficam escondidas (em outras páginas).
+   - Quando o body tiver a classe `page-loja` (adicionada pelo script),
+     o painel de notas aparece no topo e rola normalmente com a página.
+*/
+.notes-panel,
+.notes-dropdown,
+#notesPanel,
+#notesCategories {
+  display: none;
+  visibility: hidden;
+  height: 0;
+  max-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.page-loja .notes-panel,
+body.page-loja .notes-dropdown,
+body.page-loja #notesPanel,
+body.page-loja #notesCategories {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 1 !important;
+}
+
+/* mobile: garantir que o painel role e não fique flutuando */
+@media (max-width: 720px) {
+  body.page-loja .notes-panel,
+  body.page-loja .notes-dropdown,
+  body.page-loja #notesPanel,
+  body.page-loja #notesCategories {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+  }
+
+  /* guardrail: evitar sticky/fixed inline abuse */
+  body.page-loja [style*="position: sticky"], body.page-loja [style*="position:fixed"]{
+    position: static !important;
+  }
+
+  /* garantir que os cards fiquem acima */
+  .card, .product-card, .grid, .products-grid {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+  .card h3, .card .price, .buy-btn, .view-btn {
+    position: relative !important;
+    z-index: 3 !important;
+  }
+}
+
+/* small final guard to avoid odd inline heights */
+@media (max-width:720px){
+  [style] { min-height: initial !important; height: auto !important; max-height: 9999px; }
 }
