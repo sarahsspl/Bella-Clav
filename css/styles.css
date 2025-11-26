@@ -1,11 +1,11 @@
 :root{
   /* paleta verde chique (jade / esmeralda) */
-  --bg:#0e1a13;              /* fundo premium, ligeiramente mais claro que antes */
+  --bg:#0e1a13;
   --panel:#122116;
   --card:#0f1913;
-  --accent-green:#1b6a42;    /* verde jade (principal) — um pouco mais vivo */
-  --accent-green-2:#133e2a;  /* verde profundo para gradientes */
-  --accent-soft:#dff4e9;     /* verde clarinho premium (destaques/labels) */
+  --accent-green:#1b6a42;
+  --accent-green-2:#133e2a;
+  --accent-soft:#dff4e9;
   --muted:#b8d9cb;
   --text:#f5fbf6;
   --radius:16px;
@@ -66,7 +66,7 @@ a:focus{ outline:3px solid rgba(27,106,66,0.12); outline-offset:3px; border-radi
   border-radius:var(--radius);
   display:flex;
   flex-direction:column;
-  min-height:380px; /* mais espaço vertical para títulos maiores */
+  min-height:380px;
   border: 1px solid rgba(255,255,255,0.02);
   transition: transform .14s var(--easing), box-shadow .14s var(--easing);
 }
@@ -74,11 +74,11 @@ a:focus{ outline:3px solid rgba(27,106,66,0.12); outline-offset:3px; border-radi
 
 .card img{
   width:100%;
-  height:220px; /* maior para não cortar as imagens */
+  height:220px; 
   object-fit:contain;
   border-radius:12px;
-  background: transparent; /* sem faixa preta */
-  box-shadow: 0 10px 26px rgba(6,18,11,0.20); /* sombra suave e não-preta */
+  background: transparent;
+  box-shadow: 0 10px 26px rgba(6,18,11,0.20);
 }
 .card h3{
   font-size:18px; margin-top:12px; color:var(--text); font-weight:800; line-height:1.18;
@@ -240,25 +240,98 @@ a:focus{ outline:3px solid rgba(27,106,66,0.12); outline-offset:3px; border-radi
     min-width: 110px !important;
   }
 
-  /* Se os seus botões estiverem lado a lado */
   .product-actions {
     display: flex;
     gap: 10px;
     align-items: center;
     justify-content: space-between;
   }
+
+  /* garante que o botão flutuante do filtro tenha cor correta */
+  .floating-filter,
+  .floating-filter * { color: #fff !important; }
 }
+
 /* FORÇA sumir COMPLETAMENTE o painel desktop de notas no MOBILE */
 @media (max-width: 720px) {
   .filter-section,
   .notes-dropdown,
   .notes-panel,
   #notesPanel,
-  #notesCategories {
+  #notesCategories,
+  .notes-controls-top,
+  .notes-categories,
+  .note-category,
+  .note-list {
     display: none !important;
     height: 0 !important;
     max-height: 0 !important;
     opacity: 0 !important;
     overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    position: static !important;
   }
+
+  /* z-index guardrails para evitar sobreposições estranhas */
+  .card, .product-card, .grid, .products-grid {
+    position: relative !important;
+    z-index: 2 !important;
+    background-clip: padding-box;
+  }
+  .card h3, .card .price, .buy-btn, .view-btn {
+    position: relative !important;
+    z-index: 3 !important;
+  }
+
+  /* imagens: forçar contain e impedir overflow */
+  .card img { display:block !important; max-width:100% !important; height:auto !important; object-fit:contain !important; }
+
+  /* modal/backdrop z-index */
+  .notes-modal-backdrop { z-index: 240 !important; }
+  .notes-modal { z-index: 250 !important; }
+}
+
+/* ===== MOBILE modal + floating (apensar seguro) ===== */
+
+/* floating filter */
+.floating-filter {
+  position: fixed;
+  right: 16px;
+  bottom: 18px;
+  z-index: 230;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent-green);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 999px;
+  box-shadow: 0 12px 36px rgba(11,132,87,0.18);
+  font-weight:700;
+  border:0;
+  cursor:pointer;
+}
+
+/* modal backdrop + panel */
+.notes-modal-backdrop{
+  position:fixed; inset:0; background:rgba(6,10,12,0.42); display:none; align-items:center; justify-content:center; z-index:240;
+}
+.notes-modal{
+  width:92%; max-width:520px; max-height:86vh; overflow:auto; border-radius:14px; background:#fff; padding:12px;
+  box-shadow:0 12px 40px rgba(2,8,16,0.36);
+  transform:translateY(18px); transition:transform .24s ease, opacity .22s ease;
+}
+.notes-modal.open{ transform:translateY(0); }
+.notes-modal-backdrop.open{ display:flex; }
+
+/* bloquear scroll quando modal aberto */
+body.modal-open { height: 100%; overflow: hidden; touch-action: none; }
+
+/* acessibilidade */
+.notes-modal:focus { outline:3px solid rgba(94,140,97,0.12); outline-offset:2px; }
+
+/* final guard: remove inline sticky abuse */
+@media (max-width:720px){
+  [style*="position: sticky"], [style*="position:fixed"]{ position: static !important; }
 }

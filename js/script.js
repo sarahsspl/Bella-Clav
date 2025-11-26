@@ -73,7 +73,6 @@ function renderFeaturedExactly3(){
   if(!featured) return;
   featured.innerHTML = "";
 
-  // garante ids únicos e pega até 3
   const unique = Array.from(new Set(produtos.map(p => p.id))).slice(0,3);
   unique.forEach(id => {
     const p = produtos.find(x => x.id === id);
@@ -83,29 +82,15 @@ function renderFeaturedExactly3(){
   });
 }
 
-/* ========== restante do script (menus, notas, produto page) ========== */
-
-/* Notas dropdown (mesma lógica do anterior) */
+/* ========== Notas dropdown data (desktop) ========== */
 const notasCategoriasDropdown = [
   { titulo: "🌿 Notas Cítricas", itens: ["Bergamota","Limão siciliano","Lima","Laranja","Mandarina / Tangerina"] },
   { titulo: "🌸 Notas Florais — Brancos", itens: ["Jasmim","Gardênia","Tuberosa","Flor de laranjeira","Magnolia","Frangipani","Tiaré"] },
   { titulo: "🌸 Notas Florais — Clássicos", itens: ["Rosa","Íris","Violeta","Lírio-do-vale (Muguet)","Camélia","Peônia","Lavanda"] },
-  { titulo: "🌸 Notas Florais — Exóticos", itens: ["Osmanthus","Champaca","Flor de hibisco","Flor de cerejeira"] },
-  { titulo: "🍓 Notas Frutadas", itens: ["Amora","Pêra","Maçã","Morango","Framboesa","Cassis (groselha preta)","Cereja","Clementina","Pêssego","Ameixa","Melão","Melancia","Abacaxi","Manga","Maracujá","Lichia","Coco","Figo"] },
-  { titulo: "🍭 Notas Doces", itens: ["Baunilha","Fava-tonka","Caramelo","Açúcar","Macarrons","Mel","Chocolate","Café","Marshmallow","Praliné","Amêndoas","Avelã","Leite condensado","Algodão-doce","Bolo / Cookie"] },
-  { titulo: "🌾 Notas Especiadas", itens: ["Canela","Cravo","Especiarias","Noz-moscada","Cardamomo","Gengibre","Pimenta rosa","Pimenta preta","Açafrão","Cúrcuma","Cominho"] },
-  { titulo: "🌿 Notas Herbais", itens: ["Hortelã","Manjericão","Alecrim","Sálvia","Erva-cidreira","Chá verde","Chá preto","Folhas verdes","Grama fresca","Eucalipto","Folha de Violeta"] },
-  { titulo: "🌊 Notas Aquáticas", itens: ["Notas marinhas","Notas ozônicas","Brisa aquática","Pepino","Melão aquático"] },
-  { titulo: "🌲 Notas Amadeiradas", itens: ["Cedro","Sândalo","Patchouli","Oud (Agarwood)","Vetiver","Guaiacwood","Cashmere","Pinho","Copaíba","Bétula"] },
-  { titulo: "🪵 Notas Ambaradas", itens: ["Âmbar","Benjoim","Mirra","Olíbano","Labdanum","Copaíba","Resinas doces"] },
-  { titulo: "🐾 Notas Animálicas", itens: ["Almíscar","Civeta","Castóreo","Ambergris"] },
-  { titulo: "🌍 Notas Terrosas", itens: ["Musgo de carvalho","Vetiver terroso","Terra molhada","Raiz de íris","Trufa"] },
-  { titulo: "🥥 Notas Cremosas", itens: ["Leite","Creme","Chantilly","Coco cremoso","Acorde de leite"] },
-  { titulo: "💨 Notas Aromáticas", itens: ["Lavanda","Sálvia","Alecrim","Tomilho","Manjerona"] },
-  { titulo: "🍂 Notas Tabacadas", itens: ["Tabaco doce","Folha de tabaco","Tabaco ambarado"] },
-  { titulo: "🍵 Chás e infusões", itens: ["Chá verde","Chá preto","Chá branco","Mate","Earl Grey"] },
-  { titulo: "🧊 Notas Frias", itens: ["Metal","Nota gelada","Menta fria","Aldeídos"] },
-  { titulo: "🔥 Notas Quentes", itens: ["Canela quente","Âmbar escuro","Baunilha balsâmica"] }
+  { titulo: "🍓 Notas Frutadas", itens: ["Amora","Pêra","Maçã","Morango","Framboesa","Cassis","Cereja","Clementina","Pêssego","Ameixa","Manga","Coco"] },
+  { titulo: "🍭 Notas Doces", itens: ["Baunilha","Fava-tonka","Caramelo","Açúcar","Macarrons","Mel","Chocolate","Café","Praliné"] },
+  { titulo: "🌲 Notas Amadeiradas", itens: ["Cedro","Sândalo","Patchouli","Oud","Vetiver","Pinho"] },
+  { titulo: "🪵 Notas Ambaradas", itens: ["Âmbar","Benjoim","Mirra","Olíbano"] }
 ];
 
 function renderNotasDropdown() {
@@ -230,13 +215,231 @@ function initMobileNav(){
   }));
 }
 
+/* =========================
+   MOBILE NOTES: floating button + modal (robusto)
+   - cria botão flutuante
+   - cria modal/backdrop
+   - clona conteúdo das notas (ou renderiza fresh)
+   - sincroniza modal <-> desktop
+   - fecha ao rolar
+   ========================= */
+function setupMobileNotesModal(){
+  const isMobile = window.matchMedia && window.matchMedia("(max-width:720px)").matches;
+  if(!isMobile) return;
+
+  // floating button
+  let floating = document.querySelector('.floating-filter');
+  if(!floating){
+    floating = document.createElement('button');
+    floating.className = 'floating-filter';
+    floating.id = 'floatingFilterBtn';
+    floating.type = 'button';
+    floating.innerHTML = 'Filtrar Notas ▾';
+    document.body.appendChild(floating);
+  }
+
+  // backdrop + modal
+  let backdrop = document.querySelector('.notes-modal-backdrop');
+  if(!backdrop){
+    backdrop = document.createElement('div');
+    backdrop.className = 'notes-modal-backdrop';
+    backdrop.id = 'notesModalBackdrop';
+    backdrop.innerHTML = `
+      <div class="notes-modal" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle" tabindex="-1">
+        <div class="modal-header" style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="modal-title" id="notesModalTitle">Filtrar por Notas</div>
+          <button class="close-modal" aria-label="Fechar" type="button">✕</button>
+        </div>
+        <div class="modal-body" style="padding-top:10px;">
+          <input id="notesSearchModal" class="notes-search" placeholder="Buscar nota..." />
+          <div id="notesCategoriesModal" class="notes-categories" style="padding-top:12px;"></div>
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button id="notesSelectAllModal" class="small-link" type="button" style="flex:1">Selecionar Tudo</button>
+            <button id="notesClearAllModal" class="small-link" type="button" style="flex:1">Limpar Tudo</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+  }
+
+  const modal = backdrop.querySelector('.notes-modal');
+  const closeBtn = backdrop.querySelector('.close-modal');
+  const searchModal = document.getElementById('notesSearchModal');
+  const categoriesModalContainer = document.getElementById('notesCategoriesModal');
+
+  const desktopNotes = document.getElementById('notesCategories');
+  if(desktopNotes){
+    categoriesModalContainer.innerHTML = desktopNotes.innerHTML;
+  } else {
+    try{ renderNotasDropdown(); }catch(e){}
+    const d = document.getElementById('notesCategories');
+    categoriesModalContainer.innerHTML = d ? d.innerHTML : '';
+  }
+
+  // attach handlers
+  function attachModalHandlers(){
+    categoriesModalContainer.querySelectorAll('.select-group').forEach(btn => {
+      btn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const idx = btn.dataset.idx;
+        const group = categoriesModalContainer.querySelectorAll('.note-category')[idx];
+        if(!group) return;
+        group.querySelectorAll('.note-list input[type="checkbox"]').forEach(cb => {
+          cb.checked = true; cb.closest('.note-row').classList.add('checked');
+        });
+      });
+    });
+    categoriesModalContainer.querySelectorAll('.clear-group').forEach(btn => {
+      btn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const idx = btn.dataset.idx;
+        const group = categoriesModalContainer.querySelectorAll('.note-category')[idx];
+        if(!group) return;
+        group.querySelectorAll('.note-list input[type="checkbox"]').forEach(cb => {
+          cb.checked = false; cb.closest('.note-row').classList.remove('checked');
+        });
+      });
+    });
+
+    categoriesModalContainer.querySelectorAll('.note-row').forEach(row => {
+      row.addEventListener('click', (ev) => {
+        if(ev.target.tagName.toLowerCase() === 'button') return;
+        const cb = row.querySelector('input[type="checkbox"]');
+        if(!cb) return;
+        cb.checked = !cb.checked;
+        row.classList.toggle('checked', cb.checked);
+      });
+    });
+  }
+  attachModalHandlers();
+
+  function syncModalToDesktop(){
+    const desktop = document.getElementById('notesCategories');
+    if(!desktop) return;
+    const mapping = {};
+    categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+      mapping[cb.value] = cb.checked;
+    });
+    desktop.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+      if(typeof mapping[cb.value] !== 'undefined'){
+        cb.checked = mapping[cb.value];
+        cb.closest('.note-row').classList.toggle('checked', cb.checked);
+      }
+    });
+  }
+
+  function syncDesktopToModal(){
+    const desktop = document.getElementById('notesCategories');
+    if(!desktop) return;
+    const mapping = {};
+    desktop.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+      mapping[cb.value] = cb.checked;
+    });
+    categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+      if(typeof mapping[cb.value] !== 'undefined'){
+        cb.checked = mapping[cb.value];
+        cb.closest('.note-row').classList.toggle('checked', cb.checked);
+      } else {
+        cb.checked = false;
+        cb.closest('.note-row').classList.remove('checked');
+      }
+    });
+  }
+
+  function openModal(){
+    syncDesktopToModal();
+    backdrop.classList.add('open');
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    const f = backdrop.querySelector('#notesSearchModal');
+    if(f) f.focus();
+  }
+  function closeModal(){
+    syncModalToDesktop();
+    dispatchFilterUpdate();
+    modal.classList.remove('open');
+    backdrop.classList.remove('open');
+    document.body.classList.remove('modal-open');
+  }
+
+  floating.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => { if(e.target === backdrop) closeModal(); });
+
+  if(searchModal){
+    searchModal.addEventListener('input', function(){
+      const q = (this.value||"").toLowerCase().trim();
+      const cats = categoriesModalContainer.querySelectorAll('.note-category');
+      cats.forEach(cat => {
+        const rows = Array.from(cat.querySelectorAll('.note-row'));
+        let catHas = false;
+        rows.forEach(r => {
+          const txt = (r.dataset.item || r.innerText).toLowerCase();
+          const match = !q || txt.indexOf(q) !== -1;
+          r.style.display = match ? 'flex' : 'none';
+          if(match) catHas = true;
+        });
+        cat.style.display = catHas ? 'block' : 'none';
+      });
+    });
+  }
+
+  const selModal = document.getElementById('notesSelectAllModal');
+  const clrModal = document.getElementById('notesClearAllModal');
+  if(selModal){
+    selModal.addEventListener('click', () => {
+      categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+        cb.checked = true; cb.closest('.note-row').classList.add('checked');
+      });
+      syncModalToDesktop(); dispatchFilterUpdate();
+    });
+  }
+  if(clrModal){
+    clrModal.addEventListener('click', () => {
+      categoriesModalContainer.querySelectorAll('.note-row input[type="checkbox"]').forEach(cb => {
+        cb.checked = false; cb.closest('.note-row').classList.remove('checked');
+      });
+      syncModalToDesktop(); dispatchFilterUpdate();
+    });
+  }
+
+  // fechar ao rolar (debounced leve)
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    if(!window.matchMedia("(max-width:720px)").matches) return;
+    const s = window.scrollY || window.pageYOffset;
+    if(Math.abs(s - lastScroll) > 20) {
+      closeModal();
+      lastScroll = s;
+    }
+  }, { passive: true });
+
+  // resize guard
+  window.addEventListener('resize', () => {
+    if(!window.matchMedia("(max-width:720px)").matches){
+      backdrop.classList.remove('open'); modal.classList.remove('open'); document.body.classList.remove('modal-open');
+      if(floating) floating.style.display = 'none';
+    } else {
+      if(floating) floating.style.display = 'inline-flex';
+      attachModalHandlers();
+    }
+  });
+
+  // ensure floating visible on mobile init
+  if(window.matchMedia("(max-width:720px)").matches){
+    floating.style.display = 'inline-flex';
+  } else {
+    floating.style.display = 'none';
+  }
+}
+
 /* Início */
 document.addEventListener("DOMContentLoaded", () => {
   renderNotasDropdown();
   setupNotesControls();
   renderizarProdutos("todos", []);
 
-  // featured no home: garante 3 únicos
   renderFeaturedExactly3();
 
   if(window.location.pathname.endsWith("/loja/produto.html")){
@@ -253,4 +456,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   initMobileNav();
+  setupMobileNotesModal();
+
+  // Defensive: ensure desktop notes are hidden on mobile (guardrail)
+  if(window.matchMedia("(max-width:720px)").matches){
+    document.querySelectorAll('.notes-panel, .notes-dropdown, #notesPanel, #notesCategories').forEach(el=>{
+      if(el) { el.style.display = 'none'; el.style.visibility = 'hidden'; el.style.maxHeight = '0px'; el.style.overflow = 'hidden'; }
+    });
+  }
+
 });
