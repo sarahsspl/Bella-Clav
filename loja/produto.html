@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Produto — Bella Clav</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <img src="/img/logobellaclav.png" alt="Bella Clav" class="brand-logo">
+        <span class="brand-text">Bella Clav</span>
+      </a>
+
+      <nav class="nav" aria-label="Menu principal">
+        <a href="/">Home</a>
+        <a href="/loja/">Loja</a>
+        <a href="https://instagram.com/bellaclav" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">☰</button>
+    </div>
+
+    <nav id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="/">Home</a>
+      <a href="/loja/">Loja</a>
+      <a href="https://instagram.com/bellaclav" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </header>
+
+  <main class="container product-page">
+    <div class="product-card">
+      <div class="img-wrap">
+        <img id="productImage" src="/img/candywhitegrandeur.png" alt="Produto">
+      </div>
+      <div class="product-info">
+        <h1 id="productName">Nome do Produto</h1>
+        <p class="price" id="productPrice">R$ 0,00</p>
+        <button id="buyNow" class="add-cart">Comprar no WhatsApp</button>
+
+        <h3>Notas</h3>
+        <ul id="productNotes"></ul>
+
+        <h3>Descrição</h3>
+        <p id="productDesc">Descrição do produto aqui.</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>

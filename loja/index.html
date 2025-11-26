@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loja — Bella Clav</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <img src="/img/logobellaclav.png" alt="Bella Clav" class="brand-logo">
+        <span class="brand-text">Bella Clav</span>
+      </a>
+
+      <nav class="nav" aria-label="Menu principal">
+        <a href="/">Home</a>
+        <a href="/loja/" aria-current="page">Loja</a>
+        <a href="https://instagram.com/bellaclav" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">☰</button>
+    </div>
+
+    <nav id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="/">Home</a>
+      <a href="/loja/" aria-current="page">Loja</a>
+      <a href="https://instagram.com/bellaclav" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </header>
+
+  <main class="container shop-page">
+    <aside class="filters" aria-label="Filtros">
+      <div class="filter-section">
+        <label class="filter-label">Notas</label>
+
+        <div class="notes-dropdown">
+          <div class="notes-header">
+            <input id="notesSearchMain" type="search" placeholder="Buscar nota (ex: lavanda, baunilha)" class="notes-search"/>
+          </div>
+
+          <div class="notes-panel" id="notesPanel" aria-hidden="true">
+            <div class="notes-controls-top">
+              <button id="notesSelectAllGlobal" class="small-link">Selecionar tudo</button>
+              <button id="notesClearAllGlobal" class="small-link">Limpar</button>
+            </div>
+
+            <div id="notesCategories" class="notes-categories"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="products-wrap">
+      <h2>Produtos</h2>
+      <div id="products" class="grid products"></div>
+    </section>
+  </main>
+
+  <a class="floating-whatsapp" href="#" id="floatingWhats2" aria-label="Fale conosco no WhatsApp">Whatsapp</a>
+
+  <footer id="contact">
+    <div class="container footer-center">
+      <div class="footer-social">
+        <a href="https://instagram.com/bellaclav" target="_blank" rel="noopener" class="icon-link">bellaclav</a>
+        <a href="https://wa.me/5593992414794" target="_blank" rel="noopener" class="icon-link">Whatsapp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
